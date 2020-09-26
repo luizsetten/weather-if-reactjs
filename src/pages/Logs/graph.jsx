@@ -2,6 +2,7 @@ import React from 'react';
 import {
   LineChart,
   XAxis,
+  YAxis,
   Tooltip,
   CartesianGrid,
   Line,
@@ -21,6 +22,8 @@ const Graph = ({
       }}
     >
       <XAxis dataKey="createdAt" />
+      <YAxis />
+
       <Tooltip />
       <CartesianGrid stroke="#f5f5f5" />
 

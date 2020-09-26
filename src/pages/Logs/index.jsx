@@ -9,7 +9,7 @@ import {
   CartesianGrid,
   Line,
 } from 'recharts'; // http://recharts.org/en-US/guide/getting-started
-
+import CsvDownload from 'react-json-to-csv';
 import Graph from './graph';
 import api from '../../services/axios';
 
@@ -63,6 +63,10 @@ const Logs = ({ props }) => {
     console.log('Deve exportar os logs');
   }
 
+  function handleExportPDF() {
+    console.log('Deve exportar os logs');
+  }
+
   useEffect(() => {
     loadLocalStorage();
   }, []);
@@ -90,10 +94,10 @@ const Logs = ({ props }) => {
         <Graph data={data} dataKey="pressure" title="Pressão Atmosférica" color="#00ff00" />
         <Graph data={data} dataKey="windspeed" title="Velocidade do vento" color="#999999" />
         <Graph data={data} dataKey="gustofwind" title="Rajada do vento" color="#666666" />
-        <Graph data={data} dataKey="precipitation" title="Precipitação" color="#0000ff" />
+        <Graph data={data} dataKey="precipitation" title="Precipitação" color="#bb00ff" />
         <Graph data={data} dataKey="solarincidence" title="Irradiação solar" color="#ffff00" />
       </div>
-      <button onClick={handleExportCSV}>Exportar .CSV</button>
+      <CsvDownload data={data} filename="station_logs.csv">Exportar .csv</CsvDownload>
 
     </div>
   );
