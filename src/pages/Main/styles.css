@@ -19,10 +19,6 @@ body {
   flex-direction: column;
 }
 
-h2 {
-  margin-top: 3em;
-  margin-bottom: 3em;
-}
 
 select {
   width: 25em;
@@ -69,22 +65,6 @@ input {
   height: 7em;
   border-radius: 1em;
   width: 7em;
-}
-
-.arrow {
-  border: solid #359830;
-  border-width: 0 10px 10px 0;
-  display: inline-block;
-  padding: 10px;
-  margin-top: 20px;
-  margin-left: 20px;
-  align-self: baseline;
-  cursor: pointer;
-}
-
-.left {
-  transform: rotate(135deg);
-  -webkit-transform: rotate(135deg);
 }
 
 #widget {

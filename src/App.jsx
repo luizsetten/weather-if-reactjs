@@ -38,13 +38,27 @@ function App() {
         <Switch>
           <Route path="/widget">
             <Widget props={{
-              logs, setLogs, selectedStation, setSelectedStation, nameStation, setNameStation,
+              logs,
+              setLogs,
+              selectedStation,
+              setSelectedStation,
+              nameStation,
+              setNameStation,
             }}
             />
           </Route>
           <Route path="/logs">
             <Logs props={{
-              selectedStation, startDate, setStartDate, endDate, setEndDate,
+              nameStation,
+              setNameStation,
+              selectedStation,
+              setSelectedStation,
+              startDate,
+              setStartDate,
+              endDate,
+              setEndDate,
+              logs,
+              setLogs,
             }}
             />
           </Route>

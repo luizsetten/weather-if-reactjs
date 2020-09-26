@@ -1,4 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import { FaArrowLeft } from 'react-icons/fa';
+
+import Item from './item';
+
+import Sun from '../../resources/images/sun.png';
+import LowRain from '../../resources/images/low-rain.png';
+import MedRain from '../../resources/images/med-rain.png';
+import HighRain from '../../resources/images/high-rain.png';
+
 import api from '../../services/axios';
 
 import './styles.css';
@@ -12,8 +23,12 @@ const Widget = ({ props }) => {
     logs,
     setLogs,
   } = props;
-  // const [stationName, setStationName] = useState('');
+
+  const history = useHistory();
+
   const [temperature, setTemperature] = useState('');
+  const [minTemperature, setMinTemperature] = useState('');
+  const [maxTemperature, setMaxTemperature] = useState('');
   const [pressure, setPressure] = useState('');
   const [humidity, setHumidity] = useState('');
   const [windSpeed, setWindSpeed] = useState('');
@@ -21,23 +36,56 @@ const Widget = ({ props }) => {
   const [windDirection, setWindDirection] = useState('');
   const [precipitation, setPrecipitation] = useState('');
   const [solarIncidence, setSolarIncidence] = useState('');
+  const [weatherImg, setWeatherImg] = useState(Sun);
+
+  function handleBack() {
+    history.goBack();
+  }
+
+  function handleMoreInfo() {
+    history.push('/logs');
+  }
 
   async function loadLocalStorage() {
     if (selectedStation === '') {
       const savedSelec = await localStorage.getItem('@weatherData/selectedStation');
-      setSelectedStation(savedSelec);
+      await setSelectedStation(savedSelec);
+    }
+
+    if (nameStation === '') {
+      const savedName = await localStorage.getItem('@weatherData/nameStation');
+      await setNameStation(savedName);
     }
   }
 
   async function loadLogs() {
-    const response = await api.get(`/stations/${selectedStation}/logs`);
-    setLogs(response.data);
+    try {
+      if (selectedStation !== '') {
+        const response = await api.get(`/stations/${selectedStation}/logs`);
+        setLogs(response.data);
+      }
+    } catch (e) {
+      toast.error('Erro ao obter os dados da estação');
+    }
+  }
+
+  function selecImg(precipitation2) {
+    if (Number(precipitation2) > 50) {
+      return HighRain;
+    } if (Number(precipitation2) > 25) {
+      return MedRain;
+    } if (Number(precipitation2) > 0) {
+      return LowRain;
+    }
+    return Sun;
   }
 
   function setData() {
     const lastLog = logs[logs.length - 1];
     if (lastLog !== undefined) {
       setTemperature(lastLog.temperature);
+      setMinTemperature(lastLog.temperature);
+      setMaxTemperature(lastLog.temperature);
       setPressure(lastLog.pressure);
       setHumidity(lastLog.humidity);
       setWindSpeed(lastLog.windspeed);
@@ -45,34 +93,27 @@ const Widget = ({ props }) => {
       setWindDirection(lastLog.winddirection);
       setPrecipitation(lastLog.precipitation);
       setSolarIncidence(lastLog.solarincidence);
-    }
-  }
-
-  async function loadAll() {
-    try {
-      loadLocalStorage();
-      loadLogs();
-      setData();
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  async function loadNameStation() {
-    if (nameStation === '') {
-      const savedName = await localStorage.getItem('@weatherData/nameStation');
-      setNameStation(savedName);
+      setWeatherImg(selecImg(lastLog.precipitation));
     }
   }
 
   useEffect(() => {
-    loadNameStation();
-    loadAll();
-  });
+    loadLocalStorage();
+    setInterval(loadLogs, 60000);
+  }, []);
+
+  useEffect(() => {
+    loadLogs();
+  }, [selectedStation]);
+
+  useEffect(() => {
+    setData();
+  }, [logs]);
 
   return (
-    <div>
-      <i className="arrow left" id="back" />
+    <div className="container">
+      <ToastContainer />
+      <FaArrowLeft size={32} className="arrow" onClick={handleBack} />
       <h2 id="stationTitle">
         Estação Meteorológica -
         {' '}
@@ -80,45 +121,27 @@ const Widget = ({ props }) => {
       </h2>
       <div id="widget">
         <div id="basic">
-          <div className="box" />
-          <div className="box" id="temperature">{temperature}</div>
+          <div className="box">
+            <img id="image" src={weatherImg} alt="teste" />
+          </div>
+
+          <div className="box" id="temperature">
+            <h1>{`${temperature}°C`}</h1>
+            <div id="min-max">
+              <h3 id="max">{`${maxTemperature}°C`}</h3>
+              <h3>/</h3>
+              <h3 id="min">{`${minTemperature}°C`}</h3>
+            </div>
+          </div>
         </div>
-        <div className="lineWidget">
-          <span>Pressão atmosférica</span>
-          {' '}
-          <strong id="pressure">{pressure}</strong>
-        </div>
-        <div className="lineWidget">
-          <span>Umidade relativa</span>
-          {' '}
-          <strong id="humidity">{humidity}</strong>
-        </div>
-        <div className="lineWidget">
-          <span>Velocidade do vento</span>
-          {' '}
-          <strong id="windSpeed">{windSpeed}</strong>
-        </div>
-        <div className="lineWidget">
-          <span>Rajada do vento</span>
-          {' '}
-          <strong id="gustOfWind">{gustOfWind}</strong>
-        </div>
-        <div className="lineWidget">
-          <span>Direção do vento</span>
-          {' '}
-          <strong id="windDirection">{windDirection}</strong>
-        </div>
-        <div className="lineWidget">
-          <span>Precipitação</span>
-          {' '}
-          <strong id="precipitation">{precipitation}</strong>
-        </div>
-        <div className="lineWidget">
-          <span>Irradiação solar</span>
-          {' '}
-          <strong id="solarIncidence">{solarIncidence}</strong>
-        </div>
-        <button type="button" id="moreInfo">Mais Informações</button>
+        <Item description="Pressão atmosférica" id="pressure" content={`${pressure}hPa`} />
+        <Item description="Humidade relativa" id="humidity" content={`${humidity}%`} />
+        <Item description="Velocidade do vento" id="windSpeed" content={`${windSpeed}Km/h`} />
+        <Item description="Rajada do vento" id="gustOfWind" content={`${gustOfWind}Km/h`} />
+        <Item description="Direção do vento" id="windDirection" content={windDirection} />
+        <Item description="Precipitação" id="precipitation" content={`${precipitation}mm`} />
+        <Item description="Irradiação Solar" id="solarIncidence" content={solarIncidence} />
+        <button type="button" id="moreInfo" onClick={handleMoreInfo}>Mais Informações</button>
       </div>
     </div>
   );

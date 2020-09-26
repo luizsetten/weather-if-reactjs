@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import api from '../../services/axios';
 
@@ -21,13 +23,13 @@ const Main = ({ props }) => {
       const response = await api.get('/stations');
       setStations(response.data.stations);
     } catch (e) {
-      alert('Erro ao carregar os parametro, recarregue a página');
+      toast.error('Erro ao carregar os parametros, recarregue a página');
     }
   }
 
   useEffect(() => {
     loadStations();
-  });
+  }, []);
 
   async function handleSelect() {
     const select = document.getElementById('station_selector').value;
@@ -41,7 +43,7 @@ const Main = ({ props }) => {
   function handleClick(e) {
     e.preventDefault();
     if (selectedStation === '') {
-      alert('Selecione uma estação válida'); // Colocar um toast
+      toast.error('Selecione uma estação válida');
     } else {
       history.push('/widget');
     }
@@ -52,13 +54,14 @@ const Main = ({ props }) => {
   ));
 
   return (
-    <>
+    <div className="container">
+      <ToastContainer />
       <select id="station_selector" onChange={(e) => handleSelect(e)}>
         <option value="">Selecione uma estação</option>
         {stationList}
       </select>
       <button type="button" onClick={(e) => handleClick(e)}>Carregar</button>
-    </>
+    </div>
   );
 };
 
