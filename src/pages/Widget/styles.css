@@ -64,8 +64,6 @@ input {
   margin-bottom: 2em;
 }
 
-
-
 .lineWidget {
   background: #FFF;
   border-radius: 5em;
@@ -95,12 +93,10 @@ input {
   flex-direction: column;
 }
 
-
-
 .arrow {
   align-self: baseline;
   color: #359830;
-  margin-left: 1vw;
+  margin-left: 1em;
   cursor: pointer;
 }
 

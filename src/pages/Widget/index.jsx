@@ -122,7 +122,7 @@ const Widget = ({ props }) => {
       <div id="widget">
         <div id="basic">
           <div className="box">
-            <img id="image" src={weatherImg} alt="teste" />
+            <img id="image" src={weatherImg} alt={weatherImg} />
           </div>
 
           <div className="box" id="temperature">

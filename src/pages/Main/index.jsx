@@ -56,8 +56,9 @@ const Main = ({ props }) => {
   return (
     <div className="container">
       <ToastContainer />
+      <h2 id="message">Selecione uma estação abaixo</h2>
       <select id="station_selector" onChange={(e) => handleSelect(e)}>
-        <option value="">Selecione uma estação</option>
+        <option value="">Selecionar estação</option>
         {stationList}
       </select>
       <button type="button" onClick={(e) => handleClick(e)}>Carregar</button>

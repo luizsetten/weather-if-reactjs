@@ -7,9 +7,10 @@ import {
   CartesianGrid,
   Line,
 } from 'recharts';
+// http://recharts.org/en-US/guide/getting-started
 
 const Graph = ({
-  title, data, color, dataKey,
+  title, data, color, dataKey, unit,
 }) => (
   <div id="graph">
     <h2>{title}</h2>
@@ -22,12 +23,12 @@ const Graph = ({
       }}
     >
       <XAxis dataKey="createdAt" />
-      <YAxis />
+      <YAxis unit={unit} />
 
       <Tooltip />
       <CartesianGrid stroke="#f5f5f5" />
 
-      <Line type="monotone" dataKey={dataKey} stroke={color} yAxisId={0} />
+      <Line type="monotone" dataKey={dataKey} stroke={color} unit={unit || null} yAxisId={0} />
     </LineChart>
   </div>
 );
