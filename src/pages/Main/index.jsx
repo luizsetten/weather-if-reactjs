@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import api from '../../services/axios';
+import api from "../../services/axios";
 
-import './styles.css';
+import "./styles.css";
 
-const Main = ({ props }) => {
+function Main({ props }) {
   const {
     stations,
     setStations,
@@ -16,14 +16,14 @@ const Main = ({ props }) => {
     setSelectedStation,
   } = props;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   async function loadStations() {
     try {
-      const response = await api.get('/stations');
+      const response = await api.get("/stations");
       setStations(response.data.stations);
     } catch (e) {
-      toast.error('Erro ao carregar os parametros, recarregue a página');
+      toast.error("Erro ao carregar os parametros, recarregue a página");
     }
   }
 
@@ -32,25 +32,28 @@ const Main = ({ props }) => {
   }, []);
 
   async function handleSelect() {
-    const select = document.getElementById('station_selector').value;
-    const { name } = stations[document.getElementById('station_selector').selectedIndex - 1];
-    await localStorage.setItem('@weatherData/selectedStation', select);
-    await localStorage.setItem('@weatherData/nameStation', name);
+    const select = document.getElementById("station_selector").value;
+    const { name } =
+      stations[document.getElementById("station_selector").selectedIndex - 1];
+    await localStorage.setItem("@weatherData/selectedStation", select);
+    await localStorage.setItem("@weatherData/nameStation", name);
     setSelectedStation(select);
     setNameStation(name);
   }
 
   function handleClick(e) {
     e.preventDefault();
-    if (selectedStation === '') {
-      toast.error('Selecione uma estação válida');
+    if (selectedStation === "") {
+      toast.error("Selecione uma estação válida");
     } else {
-      history.push('/widget');
+      navigate("/widget");
     }
   }
 
   const stationList = stations.map((station) => (
-    <option value={station.id} key={station.id}>{station.name}</option>
+    <option value={station.id} key={station.id}>
+      {station.name}
+    </option>
   ));
 
   return (
@@ -61,9 +64,11 @@ const Main = ({ props }) => {
         <option value="">Selecionar estação</option>
         {stationList}
       </select>
-      <button type="button" onClick={(e) => handleClick(e)}>Carregar</button>
+      <button type="button" onClick={(e) => handleClick(e)}>
+        Carregar
+      </button>
     </div>
   );
-};
+}
 
 export default Main;
