@@ -9,7 +9,15 @@ import {
 } from "recharts";
 // http://recharts.org/en-US/guide/getting-started
 
-function Graph({ title, data, color, dataKey, unit }) {
+interface IGraph {
+  title: string;
+  data: any[];
+  color: string;
+  dataKey: string;
+  unit: string | undefined;
+}
+
+function Graph({ title, data, color, dataKey, unit }: IGraph) {
   return (
     <div id="graph">
       <h2>{title}</h2>
@@ -34,7 +42,7 @@ function Graph({ title, data, color, dataKey, unit }) {
           type="monotone"
           dataKey={dataKey}
           stroke={color}
-          unit={unit || null}
+          unit={unit}
           yAxisId={0}
         />
       </LineChart>
