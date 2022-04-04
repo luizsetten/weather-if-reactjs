@@ -6,9 +6,10 @@ import Widget from "./pages/Widget";
 import Logs from "./pages/Logs";
 
 import { ILog } from "./types/ILog";
+import { IStation } from "./types/IStation";
 
 function App() {
-  const [stations, setStations] = useState([]);
+  const [stations, setStations] = useState<IStation[]>([]);
   const [selectedStation, setSelectedStation] = useState("");
   const [nameStation, setNameStation] = useState("");
   const [logs, setLogs] = useState<ILog[]>([]);
