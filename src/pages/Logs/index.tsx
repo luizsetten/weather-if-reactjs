@@ -10,8 +10,24 @@ import api from "../../services/axios";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles.css";
+import { ILog } from "../../types/ILog";
 
-function Logs({ props }) {
+interface ILogsProps {
+  props: {
+    nameStation: string;
+    setNameStation: (a: string) => void;
+    selectedStation: string;
+    setSelectedStation: (a: string) => void;
+    logs: ILog[];
+    setLogs: (a: ILog[]) => void;
+    startDate: Date;
+    setStartDate: (a: Date) => void;
+    endDate: Date;
+    setEndDate: (a: Date) => void;
+  };
+}
+
+function Logs({ props }: ILogsProps) {
   const {
     nameStation,
     setNameStation,
@@ -20,11 +36,11 @@ function Logs({ props }) {
     logs,
     setLogs,
   } = props;
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<ILog[]>([]);
   const [startDate, setStartDate] = useState(new Date("2019"));
   const [endDate, setEndDate] = useState(new Date());
   const history = useNavigate();
-  const [filteredLogs, setFilteredLogs] = useState([]);
+  const [filteredLogs, setFilteredLogs] = useState<ILog[]>([]);
   const [isFiltering, setIsFiltering] = useState(false);
 
   async function loadLocalStorage() {
@@ -32,12 +48,12 @@ function Logs({ props }) {
       const savedSelec = await localStorage.getItem(
         "@weatherData/selectedStation"
       );
-      await setSelectedStation(savedSelec);
+      if (savedSelec) await setSelectedStation(savedSelec);
     }
 
     if (nameStation === "") {
       const savedName = await localStorage.getItem("@weatherData/nameStation");
-      await setNameStation(savedName);
+      if (savedName) await setNameStation(savedName);
     }
   }
 
@@ -65,7 +81,7 @@ function Logs({ props }) {
   }, [selectedStation]);
 
   useEffect(() => {
-    const temp = [];
+    const temp: ILog[] = [];
     logs.map((log) => {
       const logDate = new Date(log.createdAt);
       if (startDate < logDate && logDate < endDate) {
@@ -93,7 +109,7 @@ function Logs({ props }) {
           <span>Data inicial</span>
           <DatePicker
             selected={new Date("2020")}
-            onChange={(date) => setStartDate(date)}
+            onChange={(date: Date) => setStartDate(date)}
             showTimeSelect
             timeFormat="HH:mm"
             timeIntervals={15}
@@ -106,7 +122,7 @@ function Logs({ props }) {
           <span>Data final</span>
           <DatePicker
             selected={new Date()}
-            onChange={(date) => setEndDate(date)}
+            onChange={(date: Date) => setEndDate(date)}
             showTimeSelect
             timeFormat="HH:mm"
             timeIntervals={15}

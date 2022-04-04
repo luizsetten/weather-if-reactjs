@@ -7,4 +7,5 @@ export interface ILog {
   winddirection: number;
   precipitation: number;
   solarincidence: number;
+  createdAt: string;
 }
