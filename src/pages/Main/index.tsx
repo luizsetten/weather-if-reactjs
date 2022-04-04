@@ -1,13 +1,24 @@
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import api from "../../services/axios";
+import { IStation } from "../../types/IStation";
 
 import "./styles.css";
 
-function Main({ props }) {
+interface IMainProps {
+  props: {
+    setNameStation: (a: string) => void;
+    selectedStation: string;
+    setSelectedStation: (a: string) => void;
+    stations: IStation[];
+    setStations: (a: IStation[]) => void;
+  };
+}
+
+function Main({ props }: IMainProps) {
   const {
     stations,
     setStations,
@@ -31,18 +42,16 @@ function Main({ props }) {
     loadStations();
   }, []);
 
-  async function handleSelect() {
-    const select = document.getElementById("station_selector").value;
-    const { name } =
-      stations[document.getElementById("station_selector").selectedIndex - 1];
+  async function handleSelect(e: ChangeEvent<HTMLSelectElement>) {
+    const select = e.target.value;
+    const { name } = stations[e.target.selectedIndex - 1];
     await localStorage.setItem("@weatherData/selectedStation", select);
     await localStorage.setItem("@weatherData/nameStation", name);
     setSelectedStation(select);
     setNameStation(name);
   }
 
-  function handleClick(e) {
-    e.preventDefault();
+  function handleClick() {
     if (selectedStation === "") {
       toast.error("Selecione uma estação válida");
     } else {
@@ -50,7 +59,7 @@ function Main({ props }) {
     }
   }
 
-  const stationList = stations.map((station) => (
+  const stationList = stations.map((station: IStation) => (
     <option value={station.id} key={station.id}>
       {station.name}
     </option>
@@ -64,7 +73,7 @@ function Main({ props }) {
         <option value="">Selecionar estação</option>
         {stationList}
       </select>
-      <button type="button" onClick={(e) => handleClick(e)}>
+      <button type="button" onClick={handleClick}>
         Carregar
       </button>
     </div>
