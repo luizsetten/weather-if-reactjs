@@ -11,6 +11,7 @@ import api from "../../services/axios";
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles.css";
 import { ILog } from "../../types/ILog";
+import MultiGraph from "./multiGraph";
 
 interface ILogsProps {
   props: {
@@ -36,10 +37,10 @@ function Logs({ props }: ILogsProps) {
     logs,
     setLogs,
   } = props;
-  const [data, setData] = useState<ILog[]>([]);
+  const [data, setData] = useState<any[]>([]);
   const [startDate, setStartDate] = useState(new Date("2019"));
   const [endDate, setEndDate] = useState(new Date());
-  const history = useNavigate();
+  const navigate = useNavigate();
   const [filteredLogs, setFilteredLogs] = useState<ILog[]>([]);
   const [isFiltering, setIsFiltering] = useState(false);
 
@@ -69,7 +70,7 @@ function Logs({ props }: ILogsProps) {
   }
 
   function handleBack() {
-    history(-1);
+    navigate(-1);
   }
 
   useEffect(() => {
@@ -83,7 +84,7 @@ function Logs({ props }: ILogsProps) {
   useEffect(() => {
     const temp: ILog[] = [];
     logs.map((log) => {
-      const logDate = new Date(log.createdAt);
+      const logDate = new Date(log.created_at);
       if (startDate < logDate && logDate < endDate) {
         temp.push(log);
       }
@@ -108,26 +109,28 @@ function Logs({ props }: ILogsProps) {
         <div className="filterItem">
           <span>Data inicial</span>
           <DatePicker
+            value={startDate.toString()}
             selected={new Date("2020")}
             onChange={(date: Date) => setStartDate(date)}
             showTimeSelect
             timeFormat="HH:mm"
-            timeIntervals={15}
+            timeIntervals={60}
             timeCaption="time"
-            dateFormat="MMMM d, yyyy h:mm aa"
+            dateFormat="d/M/yyyy h:mm"
           />
         </div>
 
         <div className="filterItem">
           <span>Data final</span>
           <DatePicker
+            value={endDate.toString()}
             selected={new Date()}
             onChange={(date: Date) => setEndDate(date)}
             showTimeSelect
             timeFormat="HH:mm"
-            timeIntervals={15}
+            timeIntervals={60}
             timeCaption="time"
-            dateFormat="MMMM d, yyyy h:mm aa"
+            dateFormat="d/M/yyyy h:mm"
           />
         </div>
 
@@ -144,6 +147,42 @@ function Logs({ props }: ILogsProps) {
         </div>
       </div>
       <div id="graphGroup">
+        <MultiGraph
+          data={[
+            {
+              max: 12,
+              min: 10,
+              avg: 11,
+              createdAt: "22/05/2022 - 11:00",
+            },
+            {
+              max: 12,
+              min: 10,
+              avg: 11,
+              createdAt: "22/05/2022 - 12:00",
+            },
+            {
+              max: 12,
+              min: 10,
+              avg: 11,
+              createdAt: "22/05/2022 - 13:00",
+            },
+            {
+              max: 25,
+              min: 12,
+              avg: 15,
+              createdAt: "22/05/2022 - 14:00",
+            },
+            {
+              max: 22,
+              min: 20,
+              avg: 21,
+              createdAt: "22/05/2022 - 15:00",
+            },
+          ]}
+          title="Temperatura"
+          unit="°C"
+        />
         <Graph
           data={data}
           dataKey="temperature"

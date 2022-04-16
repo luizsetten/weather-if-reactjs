@@ -32,6 +32,7 @@ function Main({ props }: IMainProps) {
   async function loadStations() {
     try {
       const response = await api.get("/stations");
+      console.log(response);
       setStations(response.data.stations);
     } catch (e) {
       toast.error("Erro ao carregar os parametros, recarregue a página");

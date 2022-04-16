@@ -2,10 +2,10 @@ export interface ILog {
   temperature: number;
   pressure: number;
   humidity: number;
-  windspeed: number;
-  gustofwind: number;
-  winddirection: number;
+  wind_speed: number;
+  gust_of_wind: number;
+  wind_direction: number;
   precipitation: number;
-  solarincidence: number;
-  createdAt: string;
+  solar_incidence: number;
+  created_at: string;
 }

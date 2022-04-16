@@ -26,14 +26,7 @@ interface IWidgetProps {
 }
 
 function Widget({ props }: IWidgetProps) {
-  const {
-    nameStation,
-    setNameStation,
-    selectedStation,
-    setSelectedStation,
-    logs,
-    setLogs,
-  } = props;
+  const { nameStation, selectedStation } = props;
 
   const history = useNavigate();
 
@@ -57,31 +50,6 @@ function Widget({ props }: IWidgetProps) {
     history("/logs");
   }
 
-  async function loadLocalStorage() {
-    if (selectedStation === "") {
-      const savedSelec = await localStorage.getItem(
-        "@weatherData/selectedStation"
-      );
-      if (savedSelec) await setSelectedStation(savedSelec);
-    }
-
-    if (nameStation === "") {
-      const savedName = await localStorage.getItem("@weatherData/nameStation");
-      if (savedName) await setNameStation(savedName);
-    }
-  }
-
-  async function loadLogs() {
-    try {
-      if (selectedStation !== "") {
-        const response = await api.get(`/stations/${selectedStation}/logs`);
-        setLogs(response.data);
-      }
-    } catch (e) {
-      toast.error("Erro ao obter os dados da estação");
-    }
-  }
-
   function selecImg(precipitation2: number) {
     if (Number(precipitation2) > 50) {
       return HighRain;
@@ -95,36 +63,40 @@ function Widget({ props }: IWidgetProps) {
     return Sun;
   }
 
-  function setData() {
-    const lastLog = logs[logs.length - 1];
-    console.log("------------->", lastLog);
-    if (lastLog !== undefined) {
-      setTemperature(lastLog.temperature);
-      setMinTemperature(lastLog.temperature);
-      setMaxTemperature(lastLog.temperature);
-      setPressure(lastLog.pressure);
-      setHumidity(lastLog.humidity);
-      setWindSpeed(lastLog.windspeed);
-      setGustOfWind(lastLog.gustofwind);
-      setWindDirection(lastLog.winddirection);
-      setPrecipitation(lastLog.precipitation);
-      setSolarIncidence(lastLog.solarincidence);
-      setWeatherImg(selecImg(lastLog.precipitation));
+  function setData(data: ILog) {
+    if (data !== undefined) {
+      setTemperature(data.temperature || 0);
+      setMinTemperature(data.temperature || 0);
+      setMaxTemperature(data.temperature || 0);
+      setPressure(data.pressure || 0);
+      setHumidity(data.humidity || 0);
+      setWindSpeed(data.wind_speed || 0);
+      setGustOfWind(data.gust_of_wind || 0);
+      setWindDirection(data.wind_direction || 0);
+      setPrecipitation(data.precipitation || 0);
+      setSolarIncidence(data.solar_incidence || 0);
+      setWeatherImg(selecImg(data.precipitation));
+    }
+  }
+
+  async function loadLog() {
+    try {
+      if (selectedStation !== "") {
+        const response = await api.get(`/records/last/${selectedStation}`);
+        setData(response.data);
+      }
+    } catch (e) {
+      toast.error("Erro ao obter os dados da estação");
     }
   }
 
   useEffect(() => {
-    loadLocalStorage();
-    setInterval(loadLogs, 60000);
+    setInterval(loadLog, 60000);
   }, []);
 
   useEffect(() => {
-    loadLogs();
+    loadLog();
   }, [selectedStation]);
-
-  useEffect(() => {
-    setData();
-  }, [logs]);
 
   return (
     <div className="container">
