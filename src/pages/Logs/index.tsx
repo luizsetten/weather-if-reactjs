@@ -5,22 +5,24 @@ import { FaArrowLeft } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import CsvDownload from "react-json-to-csv";
 import DatePicker from "react-datepicker";
+import { addMonths, differenceInMonths } from "date-fns";
+import MultiGraph from "./multiGraph";
 import Graph from "./graph";
-import api from "../../services/axios";
+import { loadLogs } from "../../services/api";
+import { IRecord } from "../../types/IRecord";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles.css";
 import { ILog } from "../../types/ILog";
-import MultiGraph from "./multiGraph";
 
-interface ILogsProps {
+interface IRecordsProps {
   props: {
     nameStation: string;
     setNameStation: (a: string) => void;
     selectedStation: string;
     setSelectedStation: (a: string) => void;
-    logs: ILog[];
-    setLogs: (a: ILog[]) => void;
+    logs: IRecord[];
+    setLogs: (a: IRecord[]) => void;
     startDate: Date;
     setStartDate: (a: Date) => void;
     endDate: Date;
@@ -28,41 +30,23 @@ interface ILogsProps {
   };
 }
 
-function Logs({ props }: ILogsProps) {
-  const {
-    nameStation,
-    setNameStation,
-    selectedStation,
-    setSelectedStation,
-    logs,
-    setLogs,
-  } = props;
-  const [data, setData] = useState<any[]>([]);
-  const [startDate, setStartDate] = useState(new Date("2019"));
+function Logs({ props }: IRecordsProps) {
+  const { nameStation, selectedStation } = props;
+  const [data, setData] = useState<ILog[]>([]);
+  const [startDate, setStartDate] = useState(addMonths(new Date(), -2));
   const [endDate, setEndDate] = useState(new Date());
+  const [showGraph, setShowGraph] = useState(true);
   const navigate = useNavigate();
-  const [filteredLogs, setFilteredLogs] = useState<ILog[]>([]);
-  const [isFiltering, setIsFiltering] = useState(false);
 
-  async function loadLocalStorage() {
-    if (selectedStation === "") {
-      const savedSelec = await localStorage.getItem(
-        "@weatherData/selectedStation"
-      );
-      if (savedSelec) await setSelectedStation(savedSelec);
-    }
-
-    if (nameStation === "") {
-      const savedName = await localStorage.getItem("@weatherData/nameStation");
-      if (savedName) await setNameStation(savedName);
-    }
-  }
-
-  async function loadLogs() {
+  async function setLogs() {
     try {
       if (selectedStation !== "") {
-        const response = await api.get(`/stations/${selectedStation}/logs`);
-        setLogs(response.data);
+        const logs = await loadLogs(
+          selectedStation,
+          startDate.toISOString(),
+          endDate.toISOString()
+        );
+        setData(logs);
       }
     } catch (e) {
       toast.error("Erro ao obter os dados da estação");
@@ -73,32 +57,66 @@ function Logs({ props }: ILogsProps) {
     navigate(-1);
   }
 
-  useEffect(() => {
-    loadLocalStorage();
-  }, []);
+  /** TODO
+   * Multigraphs
+   * temperature_min
+   * temperature_max
+   * temperature_avg
+   * humidity_min
+   * humidity_max
+   * humidity_avg
+   * precipitation_min
+   * precipitation_max
+   * precipitation_avg
+   * solar_incidence_min
+   * solar_incidence_max
+   * solar_incidence_avg
+   *
+   *
+   * Graphs
+   * wind_direction_avg
+   * presure_avg
+   * wind_speed_avg
+   *
+   */
+
+  const mock = [
+    {
+      max: 12,
+      min: 10,
+      avg: 11,
+      created_at: "22/05/2022 - 11:00",
+    },
+    {
+      max: 12,
+      min: 10,
+      avg: 11,
+      created_at: "22/05/2022 - 12:00",
+    },
+    {
+      max: 12,
+      min: 10,
+      avg: 11,
+      created_at: "22/05/2022 - 13:00",
+    },
+    {
+      max: 25,
+      min: 12,
+      avg: 15,
+      created_at: "22/05/2022 - 14:00",
+    },
+    {
+      max: 22,
+      min: 20,
+      avg: 21,
+      created_at: "22/05/2022 - 15:00",
+    },
+  ];
 
   useEffect(() => {
-    loadLogs();
-  }, [selectedStation]);
-
-  useEffect(() => {
-    const temp: ILog[] = [];
-    logs.map((log) => {
-      const logDate = new Date(log.created_at);
-      if (startDate < logDate && logDate < endDate) {
-        temp.push(log);
-      }
-    });
-    setFilteredLogs(temp);
-  }, [startDate, endDate, isFiltering]);
-
-  useEffect(() => {
-    if (isFiltering) {
-      setData(filteredLogs);
-    } else {
-      setData(logs);
-    }
-  }, [logs, filteredLogs, isFiltering]);
+    setShowGraph(differenceInMonths(endDate, startDate) <= 2);
+    setLogs();
+  }, [selectedStation, startDate, endDate]);
 
   return (
     <div className="container">
@@ -109,137 +127,114 @@ function Logs({ props }: ILogsProps) {
         <div className="filterItem">
           <span>Data inicial</span>
           <DatePicker
-            value={startDate.toString()}
-            selected={new Date("2020")}
+            selected={startDate}
             onChange={(date: Date) => setStartDate(date)}
             showTimeSelect
+            maxDate={endDate}
             timeFormat="HH:mm"
             timeIntervals={60}
             timeCaption="time"
-            dateFormat="d/M/yyyy h:mm"
+            dateFormat="dd/MM/yyyy HH:mm"
           />
         </div>
 
         <div className="filterItem">
           <span>Data final</span>
           <DatePicker
-            value={endDate.toString()}
-            selected={new Date()}
+            selected={endDate}
+            minDate={startDate}
+            maxDate={new Date()}
             onChange={(date: Date) => setEndDate(date)}
             showTimeSelect
             timeFormat="HH:mm"
             timeIntervals={60}
             timeCaption="time"
-            dateFormat="d/M/yyyy h:mm"
+            dateFormat="dd/MM/yyyy HH:mm"
           />
         </div>
+      </div>
+      <small>Acima de 2 meses só é possível exportar os dados</small>
+      {showGraph && (
+        <div id="graphGroup">
+          <MultiGraph
+            data={data.map((log) => ({
+              reference_date: log.reference_date,
+              avg: log.temperature_avg,
+              max: log.temperature_max,
+              min: log.temperature_min,
+            }))}
+            title="Temperatura"
+            unit="°C"
+          />
 
-        <div className="filterItem">
-          <span>Filtrar</span>
-          <label className="switch" htmlFor="checkbox">
-            <input
-              type="checkbox"
-              id="checkbox"
-              onChange={(e) => setIsFiltering(e.target.checked)}
-            />
-            <span className="slider round" />
-          </label>
+          <MultiGraph
+            data={data.map((log) => ({
+              reference_date: log.reference_date,
+              avg: log.humidity_avg,
+              max: log.humidity_max,
+              min: log.humidity_min,
+            }))}
+            title="Humidade relativa"
+            unit="%"
+          />
+          <Graph
+            data={data.map((log) => ({
+              reference_date: log.created_at,
+              value: log.pressure_avg,
+            }))}
+            title="Pressão Atmosférica"
+            unit="hPa"
+            color="#00ff00"
+          />
+          <Graph
+            data={data.map((log) => ({
+              reference_date: log.created_at,
+              value: log.wind_speed_avg,
+            }))}
+            title="Velocidade do vento"
+            unit="Km/h"
+            color="#999999"
+          />
+          <Graph
+            data={data.map((log) => ({
+              reference_date: log.created_at,
+              value: log.wind_speed_avg * 2.7,
+            }))}
+            title="Rajada do vento"
+            unit="Km/h"
+            color="#666666"
+          />
+          <Graph
+            data={data.map((log) => ({
+              reference_date: log.created_at,
+              value: log.wind_direction_avg,
+            }))}
+            title="Direção do vento"
+            unit="°"
+            color="#3399ff"
+          />
+          <MultiGraph
+            data={data.map((log) => ({
+              reference_date: log.reference_date,
+              avg: log.precipitation_avg,
+              max: log.precipitation_max,
+              min: log.precipitation_min,
+            }))}
+            title="Precipitação"
+            unit="mm"
+          />
+          <MultiGraph
+            data={data.map((log) => ({
+              reference_date: log.reference_date,
+              avg: log.solar_incidence_avg,
+              max: log.solar_incidence_max,
+              min: log.solar_incidence_min,
+            }))}
+            title="Irradiação solar"
+            unit="%"
+          />
         </div>
-      </div>
-      <div id="graphGroup">
-        <MultiGraph
-          data={[
-            {
-              max: 12,
-              min: 10,
-              avg: 11,
-              createdAt: "22/05/2022 - 11:00",
-            },
-            {
-              max: 12,
-              min: 10,
-              avg: 11,
-              createdAt: "22/05/2022 - 12:00",
-            },
-            {
-              max: 12,
-              min: 10,
-              avg: 11,
-              createdAt: "22/05/2022 - 13:00",
-            },
-            {
-              max: 25,
-              min: 12,
-              avg: 15,
-              createdAt: "22/05/2022 - 14:00",
-            },
-            {
-              max: 22,
-              min: 20,
-              avg: 21,
-              createdAt: "22/05/2022 - 15:00",
-            },
-          ]}
-          title="Temperatura"
-          unit="°C"
-        />
-        <Graph
-          data={data}
-          dataKey="temperature"
-          title="Temperatura"
-          unit="°C"
-          color="#ff0000"
-        />
-        <Graph
-          data={data}
-          dataKey="humidity"
-          title="Humidade relativa"
-          unit="%"
-          color="#0000ff"
-        />
-        <Graph
-          data={data}
-          dataKey="pressure"
-          title="Pressão Atmosférica"
-          unit="hPa"
-          color="#00ff00"
-        />
-        <Graph
-          data={data}
-          dataKey="windspeed"
-          title="Velocidade do vento"
-          unit="Km/h"
-          color="#999999"
-        />
-        <Graph
-          data={data}
-          dataKey="gustofwind"
-          title="Rajada do vento"
-          unit="Km/h"
-          color="#666666"
-        />
-        <Graph
-          data={data}
-          dataKey="winddirection"
-          title="Direção do vento"
-          unit="°"
-          color="#3399ff"
-        />
-        <Graph
-          data={data}
-          dataKey="precipitation"
-          title="Precipitação"
-          unit="mm"
-          color="#bb00ff"
-        />
-        <Graph
-          data={data}
-          dataKey="solarincidence"
-          title="Irradiação solar"
-          unit="%"
-          color="#af5500"
-        />
-      </div>
+      )}
       <CsvDownload data={data} filename="station_logs.csv">
         Exportar .csv
       </CsvDownload>

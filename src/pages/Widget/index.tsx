@@ -4,13 +4,13 @@ import { ToastContainer, toast } from "react-toastify";
 import { FaArrowLeft } from "react-icons/fa";
 
 import Item from "./item";
-import { ILog } from "../../types/ILog";
+import { IRecord } from "../../types/IRecord";
 import Sun from "../../resources/images/sun.png";
 import LowRain from "../../resources/images/low-rain.png";
 import MedRain from "../../resources/images/med-rain.png";
 import HighRain from "../../resources/images/high-rain.png";
 
-import api from "../../services/axios";
+import api from "../../config/axios";
 
 import "./styles.css";
 
@@ -20,8 +20,8 @@ interface IWidgetProps {
     setNameStation: (a: string) => void;
     selectedStation: string;
     setSelectedStation: (a: string) => void;
-    logs: ILog[];
-    setLogs: (a: ILog[]) => void;
+    logs: IRecord[];
+    setLogs: (a: IRecord[]) => void;
   };
 }
 
@@ -63,7 +63,7 @@ function Widget({ props }: IWidgetProps) {
     return Sun;
   }
 
-  function setData(data: ILog) {
+  function setData(data: IRecord) {
     if (data !== undefined) {
       setTemperature(data.temperature || 0);
       setMinTemperature(data.temperature || 0);

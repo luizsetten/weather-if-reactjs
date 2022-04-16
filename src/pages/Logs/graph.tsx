@@ -9,15 +9,21 @@ import {
 } from "recharts";
 // http://recharts.org/en-US/guide/getting-started
 
+interface IItemData {
+  reference_date: string;
+  value: number;
+}
+
 interface IGraph {
   title: string;
-  data: any[];
+  data: IItemData[];
   color: string;
-  dataKey: string;
+  // eslint-disable-next-line react/require-default-props
+  dataKey?: string;
   unit: string | undefined;
 }
 
-function Graph({ title, data, color, dataKey, unit }: IGraph) {
+function Graph({ title, data, color, dataKey = "value", unit }: IGraph) {
   return (
     <div id="graph">
       <h2>{title}</h2>
@@ -32,7 +38,7 @@ function Graph({ title, data, color, dataKey, unit }: IGraph) {
           bottom: 5,
         }}
       >
-        <XAxis dataKey="createdAt" />
+        <XAxis dataKey="reference_date" />
         <YAxis unit={unit} />
 
         <Tooltip />

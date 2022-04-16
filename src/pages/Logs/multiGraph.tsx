@@ -13,7 +13,7 @@ interface IGraphItem {
   min: number;
   avg: number;
   max: number;
-  createdAt: string;
+  reference_date: string;
 }
 
 interface IGraph {
@@ -37,7 +37,7 @@ function MultiGraph({ title, data, unit }: IGraph) {
           bottom: 5,
         }}
       >
-        <XAxis dataKey="createdAt" />
+        <XAxis dataKey="created_at" />
         <YAxis unit={unit} />
 
         <Tooltip />
