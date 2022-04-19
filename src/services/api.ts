@@ -13,5 +13,22 @@ const loadLogs = async (
   return logs;
 };
 
+const downloadLogs = async (
+  stationId: string,
+  startDate: string,
+  endDate: string
+): Promise<Blob> => {
+  const { data } = await api.get(
+    `/logs/${stationId}/${startDate}/${endDate}/download`,
+    {
+      headers: {
+        "Content-Type": "text/csv",
+      },
+    }
+  );
+
+  return data;
+};
+
 // eslint-disable-next-line import/prefer-default-export
-export { loadLogs };
+export { loadLogs, downloadLogs };

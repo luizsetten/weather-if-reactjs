@@ -8,12 +8,13 @@ import DatePicker from "react-datepicker";
 import { addMonths, differenceInDays, format } from "date-fns";
 import MultiGraph from "./multiGraph";
 import Graph from "./graph";
-import { loadLogs } from "../../services/api";
+import { downloadLogs, loadLogs } from "../../services/api";
 import { IRecord } from "../../types/IRecord";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles.css";
 import { ILog } from "../../types/ILog";
+import api from "../../config/axios";
 
 interface IRecordsProps {
   props: {
@@ -69,9 +70,31 @@ function Logs({ props }: IRecordsProps) {
 
   useEffect(() => {
     setShowGraph(differenceInDays(endDate, startDate) <= 60);
-    setLogs();
+    if (differenceInDays(endDate, startDate) <= 60) setLogs();
   }, [selectedStation, startDate, endDate]);
 
+  async function download() {
+    const blob = await downloadLogs(
+      selectedStation,
+      startDate.toISOString(),
+      endDate.toISOString()
+    );
+
+    // Create blob link to download
+    const url = window.URL.createObjectURL(new Blob([blob]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `logs.csv`);
+
+    // Append to html link element page
+    document.body.appendChild(link);
+
+    // Start download
+    link.click();
+
+    // Clean up and remove the link
+    link.parentNode?.removeChild(link);
+  }
   return (
     <div className="container">
       <FaArrowLeft size={32} className="arrow" onClick={handleBack} />
@@ -189,9 +212,12 @@ function Logs({ props }: IRecordsProps) {
           />
         </div>
       )}
-      <CsvDownload data={data} filename="station_logs.csv">
+      <button onClick={download} type="button">
+        Download .csv
+      </button>
+      {/* <CsvDownload data={data} filename="station_logs.csv">
         Exportar .csv
-      </CsvDownload>
+      </CsvDownload> */}
     </div>
   );
 }
