@@ -1,9 +1,8 @@
-import React, { ChangeEvent, useEffect } from "react";
+import React, { ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import api from "../../config/axios";
 import { IStation } from "../../types/IStation";
 
 import "./styles.css";
@@ -14,34 +13,14 @@ interface IMainProps {
     selectedStation: string;
     setSelectedStation: (a: string) => void;
     stations: IStation[];
-    setStations: (a: IStation[]) => void;
   };
 }
 
 function Main({ props }: IMainProps) {
-  const {
-    stations,
-    setStations,
-    setNameStation,
-    selectedStation,
-    setSelectedStation,
-  } = props;
+  const { stations, setNameStation, selectedStation, setSelectedStation } =
+    props;
 
   const navigate = useNavigate();
-
-  async function loadStations() {
-    try {
-      const response = await api.get("/stations");
-      console.log(response);
-      setStations(response.data.stations);
-    } catch (e) {
-      toast.error("Erro ao carregar os parametros, recarregue a página");
-    }
-  }
-
-  useEffect(() => {
-    loadStations();
-  }, []);
 
   async function handleSelect(e: ChangeEvent<HTMLSelectElement>) {
     const select = e.target.value;

@@ -5,7 +5,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import CsvDownload from "react-json-to-csv";
 import DatePicker from "react-datepicker";
-import { addMonths, differenceInMonths } from "date-fns";
+import { addMonths, differenceInDays, format } from "date-fns";
 import MultiGraph from "./multiGraph";
 import Graph from "./graph";
 import { loadLogs } from "../../services/api";
@@ -46,7 +46,17 @@ function Logs({ props }: IRecordsProps) {
           startDate.toISOString(),
           endDate.toISOString()
         );
-        setData(logs);
+
+        setData(
+          logs.map((log) => ({
+            ...log,
+            reference_date: format(
+              new Date(log.reference_date),
+              "dd/MM/yy HH:mm"
+            ),
+            created_at: format(new Date(log.created_at), "dd/MM/yy HH:mm"),
+          }))
+        );
       }
     } catch (e) {
       toast.error("Erro ao obter os dados da estação");
@@ -57,64 +67,8 @@ function Logs({ props }: IRecordsProps) {
     navigate(-1);
   }
 
-  /** TODO
-   * Multigraphs
-   * temperature_min
-   * temperature_max
-   * temperature_avg
-   * humidity_min
-   * humidity_max
-   * humidity_avg
-   * precipitation_min
-   * precipitation_max
-   * precipitation_avg
-   * solar_incidence_min
-   * solar_incidence_max
-   * solar_incidence_avg
-   *
-   *
-   * Graphs
-   * wind_direction_avg
-   * presure_avg
-   * wind_speed_avg
-   *
-   */
-
-  const mock = [
-    {
-      max: 12,
-      min: 10,
-      avg: 11,
-      created_at: "22/05/2022 - 11:00",
-    },
-    {
-      max: 12,
-      min: 10,
-      avg: 11,
-      created_at: "22/05/2022 - 12:00",
-    },
-    {
-      max: 12,
-      min: 10,
-      avg: 11,
-      created_at: "22/05/2022 - 13:00",
-    },
-    {
-      max: 25,
-      min: 12,
-      avg: 15,
-      created_at: "22/05/2022 - 14:00",
-    },
-    {
-      max: 22,
-      min: 20,
-      avg: 21,
-      created_at: "22/05/2022 - 15:00",
-    },
-  ];
-
   useEffect(() => {
-    setShowGraph(differenceInMonths(endDate, startDate) <= 2);
+    setShowGraph(differenceInDays(endDate, startDate) <= 60);
     setLogs();
   }, [selectedStation, startDate, endDate]);
 
@@ -134,7 +88,7 @@ function Logs({ props }: IRecordsProps) {
             timeFormat="HH:mm"
             timeIntervals={60}
             timeCaption="time"
-            dateFormat="dd/MM/yyyy HH:mm"
+            dateFormat="dd/MM/yyyy HH:00"
           />
         </div>
 
@@ -149,11 +103,11 @@ function Logs({ props }: IRecordsProps) {
             timeFormat="HH:mm"
             timeIntervals={60}
             timeCaption="time"
-            dateFormat="dd/MM/yyyy HH:mm"
+            dateFormat="dd/MM/yyyy HH:00"
           />
         </div>
       </div>
-      <small>Acima de 2 meses só é possível exportar os dados</small>
+      <small>Acima de 60 dias só é possível exportar os dados</small>
       {showGraph && (
         <div id="graphGroup">
           <MultiGraph
@@ -179,7 +133,7 @@ function Logs({ props }: IRecordsProps) {
           />
           <Graph
             data={data.map((log) => ({
-              reference_date: log.created_at,
+              reference_date: log.reference_date,
               value: log.pressure_avg,
             }))}
             title="Pressão Atmosférica"
@@ -188,7 +142,7 @@ function Logs({ props }: IRecordsProps) {
           />
           <Graph
             data={data.map((log) => ({
-              reference_date: log.created_at,
+              reference_date: log.reference_date,
               value: log.wind_speed_avg,
             }))}
             title="Velocidade do vento"
@@ -197,7 +151,7 @@ function Logs({ props }: IRecordsProps) {
           />
           <Graph
             data={data.map((log) => ({
-              reference_date: log.created_at,
+              reference_date: log.reference_date,
               value: log.wind_speed_avg * 2.7,
             }))}
             title="Rajada do vento"
@@ -206,7 +160,7 @@ function Logs({ props }: IRecordsProps) {
           />
           <Graph
             data={data.map((log) => ({
-              reference_date: log.created_at,
+              reference_date: log.reference_date,
               value: log.wind_direction_avg,
             }))}
             title="Direção do vento"
@@ -231,7 +185,7 @@ function Logs({ props }: IRecordsProps) {
               min: log.solar_incidence_min,
             }))}
             title="Irradiação solar"
-            unit="%"
+            unit="mW/m²"
           />
         </div>
       )}

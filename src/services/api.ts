@@ -8,7 +8,7 @@ const loadLogs = async (
 ): Promise<ILog[]> => {
   const {
     data: { logs },
-  } = await api.get(`/stations/${stationId}/logs/${startDate}/${endDate}`);
+  } = await api.get(`/logs/${stationId}/${startDate}/${endDate}`);
 
   return logs;
 };

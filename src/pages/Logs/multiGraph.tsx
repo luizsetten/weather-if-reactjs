@@ -37,7 +37,7 @@ function MultiGraph({ title, data, unit }: IGraph) {
           bottom: 5,
         }}
       >
-        <XAxis dataKey="created_at" />
+        <XAxis dataKey="reference_date" />
         <YAxis unit={unit} />
 
         <Tooltip />

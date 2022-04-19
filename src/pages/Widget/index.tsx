@@ -109,13 +109,13 @@ function Widget({ props }: IWidgetProps) {
             <img id="image" src={weatherImg} alt={weatherImg} />
           </div>
 
-          <div className="box" id="temperature">
-            <h1>{`${temperature}°C`}</h1>
-            <div id="min-max">
-              <h3 id="max">{`${maxTemperature}°C`}</h3>
+          <div className="box" id="temperature" style={{ width: "10rem" }}>
+            <h1>{`${temperature.toFixed(2)}°C`}</h1>
+            {/* <div id="min-max">
+              <h3 id="max">{`${maxTemperature.toFixed(2)}°C`}</h3>
               <h3>/</h3>
-              <h3 id="min">{`${minTemperature}°C`}</h3>
-            </div>
+              <h3 id="min">{`${minTemperature.toFixed(2)}°C`}</h3>
+            </div> */}
           </div>
         </div>
         <Item
