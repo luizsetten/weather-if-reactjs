@@ -154,14 +154,15 @@ function Logs({ props }: IRecordsProps) {
             title="Humidade relativa"
             unit="%"
           />
-          <Graph
+          <MultiGraph
             data={data.map((log) => ({
               reference_date: log.reference_date,
-              value: log.pressure_avg,
+              avg: log.pressure_avg,
+              max: log.pressure_max,
+              min: log.pressure_min,
             }))}
             title="Pressão Atmosférica"
             unit="hPa"
-            color="#00ff00"
           />
           <MultiGraph
             data={data.map((log) => ({
