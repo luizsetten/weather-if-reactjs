@@ -163,23 +163,25 @@ function Logs({ props }: IRecordsProps) {
             unit="hPa"
             color="#00ff00"
           />
-          <Graph
+          <MultiGraph
             data={data.map((log) => ({
               reference_date: log.reference_date,
-              value: log.wind_speed_avg,
+              avg: log.wind_speed_avg,
+              max: log.wind_speed_max,
+              min: log.wind_speed_min,
             }))}
             title="Velocidade do vento"
-            unit="Km/h"
-            color="#999999"
+            unit="m/s"
           />
-          <Graph
+          <MultiGraph
             data={data.map((log) => ({
               reference_date: log.reference_date,
-              value: log.wind_speed_avg * 2.7,
+              avg: log.wind_speed_avg * 2.7,
+              max: log.wind_speed_max * 2.7,
+              min: log.wind_speed_min * 2.7,
             }))}
-            title="Rajada do vento"
-            unit="Km/h"
-            color="#666666"
+            title="Velocidade do vento"
+            unit="m/s"
           />
           <Graph
             data={data.map((log) => ({
@@ -188,17 +190,16 @@ function Logs({ props }: IRecordsProps) {
             }))}
             title="Direção do vento"
             unit="°"
-            color="#3399ff"
+            color="#99c9f9"
           />
-          <MultiGraph
+          <Graph
             data={data.map((log) => ({
               reference_date: log.reference_date,
-              avg: log.precipitation_avg,
-              max: log.precipitation_max,
-              min: log.precipitation_min,
+              value: log.precipitation_acc,
             }))}
             title="Precipitação"
             unit="mm"
+            color="#3399ff"
           />
           <MultiGraph
             data={data.map((log) => ({
@@ -215,9 +216,6 @@ function Logs({ props }: IRecordsProps) {
       <button onClick={download} type="button">
         Download .csv
       </button>
-      {/* <CsvDownload data={data} filename="station_logs.csv">
-        Exportar .csv
-      </CsvDownload> */}
     </div>
   );
 }
