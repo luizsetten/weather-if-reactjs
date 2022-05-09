@@ -9,6 +9,8 @@ import Logs from "./pages/Logs";
 import { IRecord } from "./types/IRecord";
 import { IStation } from "./types/IStation";
 import api from "./config/axios";
+import { CreateUser } from "./pages/CreateUser";
+import { UserDashboard } from "./pages/UserDashboard";
 
 function App() {
   const [stations, setStations] = useState<IStation[]>([]);
@@ -24,12 +26,10 @@ function App() {
 
   const StationContext = createContext(context);
 
-  const loadLocalStorage = async () => {
+  const loadLocalStorage = () => {
     if (!selectedStation) {
-      const savedStation = await localStorage.getItem(
-        "@weatherData/selectedStation"
-      );
-      const nameSaved = await localStorage.getItem("@weatherData/nameStation");
+      const savedStation = localStorage.getItem("@weatherData/selectedStation");
+      const nameSaved = localStorage.getItem("@weatherData/nameStation");
       if (savedStation) setSelectedStation(savedStation);
       if (nameSaved) setNameStation(nameSaved);
     }
@@ -53,6 +53,8 @@ function App() {
     <StationContext.Provider value={context}>
       <BrowserRouter>
         <Routes>
+          <Route path="/createUser" element={<CreateUser />} />
+          <Route path="/userDashboard" element={<UserDashboard />} />
           <Route
             path="/widget"
             element={

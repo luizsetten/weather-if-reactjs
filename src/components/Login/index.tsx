@@ -1,0 +1,62 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import api from "../../config/axios";
+import "./styles.css";
+
+export function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  async function handleLogin() {
+    if (!email || !password)
+      return toast.error("Digite e-mail e senha para continuar!");
+
+    // const { token } = await api.post<{ error: string }, { token: string }>(
+    //   "/authenticate",
+    //   {
+    //     email,
+    //     password,
+    //   }
+    // );
+    const token = "ola";
+
+    if (!token) return toast.error("Usuário e/ou senha inválido!");
+
+    sessionStorage.setItem("@weatherData/userToken", token);
+    return navigate("/userDashboard");
+  }
+
+  return (
+    <div>
+      <div className="container_login">
+        <label htmlFor="email">
+          Email
+          <input
+            type="email"
+            name="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.currentTarget.value)}
+          />
+        </label>
+
+        <label htmlFor="password">
+          Password
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.currentTarget.value)}
+          />
+        </label>
+        <button type="button" onClick={handleLogin}>
+          Login
+        </button>
+      </div>
+      <a href="./createUser">Cadastre-se aqui</a>
+    </div>
+  );
+}
