@@ -31,8 +31,8 @@ function Widget({ props }: IWidgetProps) {
   const history = useNavigate();
 
   const [temperature, setTemperature] = useState(0);
-  const [minTemperature, setMinTemperature] = useState(0);
-  const [maxTemperature, setMaxTemperature] = useState(0);
+  // const [minTemperature, setMinTemperature] = useState(0);
+  // const [maxTemperature, setMaxTemperature] = useState(0);
   const [pressure, setPressure] = useState(0);
   const [humidity, setHumidity] = useState(0);
   const [windSpeed, setWindSpeed] = useState(0);
@@ -66,8 +66,8 @@ function Widget({ props }: IWidgetProps) {
   function setData(data: IRecord) {
     if (data !== undefined) {
       setTemperature(data.temperature || 0);
-      setMinTemperature(data.temperature || 0);
-      setMaxTemperature(data.temperature || 0);
+      // setMinTemperature(data.temperature || 0);
+      // setMaxTemperature(data.temperature || 0);
       setPressure(data.pressure || 0);
       setHumidity(data.humidity || 0);
       setWindSpeed(data.wind_speed || 0);
@@ -131,27 +131,27 @@ function Widget({ props }: IWidgetProps) {
         <Item
           description="Velocidade do vento"
           id="windSpeed"
-          content={`${windSpeed}Km/h`}
+          content={`${windSpeed}m/s`}
         />
         <Item
           description="Rajada do vento"
           id="gustOfWind"
-          content={`${gustOfWind}Km/h`}
+          content={`${gustOfWind}m/s`}
         />
         <Item
           description="Direção do vento"
           id="windDirection"
-          content={windDirection}
+          content={`${windDirection}°`}
         />
         <Item
           description="Precipitação"
           id="precipitation"
-          content={`${precipitation}mm`}
+          content={`${precipitation}mm/min`}
         />
         <Item
           description="Irradiação Solar"
           id="solarIncidence"
-          content={solarIncidence}
+          content={`${solarIncidence}W/m²`}
         />
         <button type="button" id="moreInfo" onClick={handleMoreInfo}>
           Mais Informações

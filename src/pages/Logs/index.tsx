@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
-import CsvDownload from "react-json-to-csv";
 import DatePicker from "react-datepicker";
 import { addMonths, differenceInDays, format } from "date-fns";
 import MultiGraph from "./multiGraph";
@@ -14,7 +13,6 @@ import { IRecord } from "../../types/IRecord";
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles.css";
 import { ILog } from "../../types/ILog";
-import api from "../../config/axios";
 
 interface IRecordsProps {
   props: {
@@ -130,7 +128,10 @@ function Logs({ props }: IRecordsProps) {
           />
         </div>
       </div>
-      <small>Acima de 60 dias só é possível exportar os dados</small>
+      <small>
+        Para intervalos maiores que 60 dias não é possível visualizar os
+        gráficos, apenas exportar os dados.
+      </small>
       {showGraph && (
         <div id="graphGroup">
           <MultiGraph
