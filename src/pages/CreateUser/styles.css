@@ -1,0 +1,17 @@
+.arrow {
+  align-self: baseline;
+  color: #359830;
+  margin-left: 1em;
+  cursor: pointer;
+}
+
+.create-user-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.create-user-container {
+  display: flex;
+  flex-direction: column;
+  margin: 5rem;
+}

@@ -13,19 +13,22 @@ export function Login() {
     if (!email || !password)
       return toast.error("Digite e-mail e senha para continuar!");
 
-    // const { token } = await api.post<{ error: string }, { token: string }>(
-    //   "/authenticate",
-    //   {
-    //     email,
-    //     password,
-    //   }
-    // );
-    const token = "ola";
+    try {
+      const {
+        data: { token },
+      } = await api.post<unknown, { data: { token: string } }>(
+        "/users/authenticate",
+        {
+          email,
+          password,
+        }
+      );
 
-    if (!token) return toast.error("Usuário e/ou senha inválido!");
-
-    sessionStorage.setItem("@weatherData/userToken", token);
-    return navigate("/userDashboard");
+      sessionStorage.setItem("@weatherData/userToken", token);
+      return navigate("/userDashboard");
+    } catch {
+      return toast.error("Usuário e/ou senha inválido!");
+    }
   }
 
   return (
@@ -34,6 +37,7 @@ export function Login() {
         <label htmlFor="email">
           Email
           <input
+            className="input-login"
             type="email"
             name="email"
             id="email"
@@ -45,6 +49,7 @@ export function Login() {
         <label htmlFor="password">
           Password
           <input
+            className="input-login"
             type="password"
             name="password"
             id="password"

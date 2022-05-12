@@ -1,7 +1,7 @@
 import React, { useState, createContext, useEffect, useMemo } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import Main from "./pages/Main";
 import Widget from "./pages/Widget";
 import Logs from "./pages/Logs";
@@ -51,6 +51,7 @@ function App() {
 
   return (
     <StationContext.Provider value={context}>
+      <ToastContainer />
       <BrowserRouter>
         <Routes>
           <Route path="/createUser" element={<CreateUser />} />

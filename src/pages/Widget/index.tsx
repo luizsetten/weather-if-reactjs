@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { FaArrowLeft } from "react-icons/fa";
 
 import Item from "./item";
@@ -100,7 +100,6 @@ function Widget({ props }: IWidgetProps) {
 
   return (
     <div className="container">
-      <ToastContainer />
       <FaArrowLeft size={32} className="arrow" onClick={handleBack} />
       <h2 id="stationTitle">Estação Meteorológica - {nameStation}</h2>
       <div id="widget">
@@ -111,11 +110,6 @@ function Widget({ props }: IWidgetProps) {
 
           <div className="box" id="temperature" style={{ width: "10rem" }}>
             <h1>{`${temperature.toFixed(2)}°C`}</h1>
-            {/* <div id="min-max">
-              <h3 id="max">{`${maxTemperature.toFixed(2)}°C`}</h3>
-              <h3>/</h3>
-              <h3 id="min">{`${minTemperature.toFixed(2)}°C`}</h3>
-            </div> */}
           </div>
         </div>
         <Item

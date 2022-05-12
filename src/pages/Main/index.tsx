@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Login } from "../../components/Login";
 
@@ -47,27 +47,24 @@ function Main({ props }: IMainProps) {
   ));
 
   return (
-    <>
-      <ToastContainer />
-      <div className="container_main">
-        <div className="container">
-          <h2 id="message">Autentique-se</h2>
-          <Login />
-        </div>
-        <h2 id="message">OU</h2>
-
-        <div className="container">
-          <h2 id="message">Selecione uma estação abaixo</h2>
-          <select id="station_selector" onChange={(e) => handleSelect(e)}>
-            <option value="">Selecionar estação</option>
-            {stationList}
-          </select>
-          <button type="button" onClick={handleClick}>
-            Carregar
-          </button>
-        </div>
+    <div className="container_main">
+      <div className="container">
+        <h2 id="message">Autentique-se</h2>
+        <Login />
       </div>
-    </>
+      <h2 id="message">OU</h2>
+
+      <div className="container">
+        <h2 id="message">Selecione uma estação abaixo</h2>
+        <select id="station_selector" onChange={(e) => handleSelect(e)}>
+          <option value="">Selecionar estação</option>
+          {stationList}
+        </select>
+        <button type="button" onClick={handleClick}>
+          Carregar
+        </button>
+      </div>
+    </div>
   );
 }
 

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import { addMonths, differenceInDays, format } from "date-fns";
 import MultiGraph from "./multiGraph";
@@ -97,7 +97,6 @@ function Logs({ props }: IRecordsProps) {
     <div className="container">
       <FaArrowLeft size={32} className="arrow" onClick={handleBack} />
       <h2 id="stationTitle">Estação Meteorológica - {nameStation}</h2>
-      <ToastContainer />
       <div id="filter">
         <div className="filterItem">
           <span>Data inicial</span>

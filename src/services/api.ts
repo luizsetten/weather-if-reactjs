@@ -1,7 +1,9 @@
 import api from "../config/axios";
 import { ILog } from "../types/ILog";
+import { IStation } from "../types/IStation";
+import { IUserRegister } from "../types/IUser";
 
-const loadLogs = async (
+export const loadLogs = async (
   stationId: string,
   startDate: string,
   endDate: string
@@ -33,7 +35,7 @@ const loadLogs = async (
   });
 };
 
-const downloadLogs = async (
+export const downloadLogs = async (
   stationId: string,
   startDate: string,
   endDate: string
@@ -50,5 +52,34 @@ const downloadLogs = async (
   return data;
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { loadLogs, downloadLogs };
+export const createUser = async (user: IUserRegister) => {
+  const { data } = await api.post("/users", user);
+  return data;
+};
+
+export const createStation = async ({
+  name,
+  latitude,
+  location,
+  longitude,
+}: IStation) => {
+  const { data } = await api.post("/stations", {
+    name,
+    latitude,
+    location,
+    longitude,
+  });
+  return data;
+};
+
+export const updateStation = async (station: IStation, user: string) => {
+  const { data } = await api.put("/stations", { ...station, user });
+  return data;
+};
+
+export const loadUserStations = async (token: string) => {
+  const { data } = await api.get<any, { data: { stations: IStation[] } }>(
+    `/stations/${token}`
+  );
+  return data;
+};
