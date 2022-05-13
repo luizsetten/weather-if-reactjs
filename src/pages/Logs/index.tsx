@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
-import { addMonths, differenceInDays, format } from "date-fns";
+import { addDays, addMonths, differenceInDays, format } from "date-fns";
 import MultiGraph from "./multiGraph";
 import Graph from "./graph";
 import { downloadLogs, loadLogs } from "../../services/api";
@@ -32,7 +32,9 @@ interface IRecordsProps {
 function Logs({ props }: IRecordsProps) {
   const { nameStation, selectedStation } = props;
   const [data, setData] = useState<ILog[]>([]);
-  const [startDate, setStartDate] = useState(addMonths(new Date(), -2));
+  const [startDate, setStartDate] = useState(
+    addDays(addMonths(new Date(), -2), 1)
+  );
   const [endDate, setEndDate] = useState(new Date());
   const [showGraph, setShowGraph] = useState(true);
   const navigate = useNavigate();
