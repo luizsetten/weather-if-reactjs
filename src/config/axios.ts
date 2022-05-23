@@ -5,24 +5,22 @@ const api = Axios.create({
   baseURL: "http://192.168.0.112:3333/",
 });
 
-api.interceptors.request.use((config) => {
+api.interceptors.request.use((request) => {
   const token = sessionStorage.getItem("@weatherData/userToken");
   // eslint-disable-next-line no-param-reassign
-  if (token) config.headers = { authorization: `Bearer ${token}` };
-  return config;
+  if (token) request.headers = { authorization: `Bearer ${token}` };
+  return request;
 });
 
 api.interceptors.response.use(
-  (config) => {
-    return config;
-  },
-  (configErr) => {
-    if (configErr.status === 401) {
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
       sessionStorage.removeItem("@weatherData/userToken");
-      // Navegar para tela inicial
+      window.location.href = "/";
     }
 
-    return configErr;
+    return error;
   }
 );
 
