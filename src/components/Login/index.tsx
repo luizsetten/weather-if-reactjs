@@ -15,16 +15,20 @@ export function Login() {
 
     try {
       const {
-        data: { token },
-      } = await api.post<unknown, { data: { token: string } }>(
-        "/users/authenticate",
-        {
-          email,
-          password,
-        }
-      );
+        data: {
+          token,
+          user: { role },
+        },
+      } = await api.post<
+        unknown,
+        { data: { token: string; user: { role: string } } }
+      >("/users/authenticate", {
+        email,
+        password,
+      });
 
       sessionStorage.setItem("@weatherData/userToken", token);
+      if (role === "admin") return navigate("/adminDashboard");
       return navigate("/userDashboard");
     } catch {
       return toast.error("Usuário e/ou senha inválido!");

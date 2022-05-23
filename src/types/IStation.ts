@@ -4,4 +4,5 @@ export interface IStation {
   location?: string;
   latitude?: number;
   longitude?: number;
+  user?: string;
 }

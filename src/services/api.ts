@@ -1,7 +1,7 @@
 import api from "../config/axios";
 import { ILog } from "../types/ILog";
 import { IStation } from "../types/IStation";
-import { IUserRegister } from "../types/IUser";
+import { IUser, IUserRegister } from "../types/IUser";
 
 export const loadLogs = async (
   stationId: string,
@@ -57,17 +57,26 @@ export const createUser = async (user: IUserRegister) => {
   return data;
 };
 
-export const createStation = async ({
-  name,
-  latitude,
-  location,
-  longitude,
-}: IStation) => {
+export const listUsers = async (token: string) => {
+  const { data } = await api.get<any, { data: { users: IUser[] } }>(`/users`);
+  return data;
+};
+
+export const updateUser = async (editUser: IUserRegister, user: string) => {
+  const { data } = await api.put("/users", { ...editUser, user });
+  return data;
+};
+
+export const createStation = async (
+  { name, latitude, location, longitude }: IStation,
+  user: string
+) => {
   const { data } = await api.post("/stations", {
     name,
     latitude,
     location,
     longitude,
+    user,
   });
   return data;
 };
@@ -79,7 +88,7 @@ export const updateStation = async (station: IStation, user: string) => {
 
 export const loadUserStations = async (token: string) => {
   const { data } = await api.get<any, { data: { stations: IStation[] } }>(
-    `/stations/${token}`
+    `/stations/mine`
   );
   return data;
 };

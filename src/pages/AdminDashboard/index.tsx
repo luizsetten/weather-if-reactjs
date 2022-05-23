@@ -17,15 +17,25 @@ import { MdLogout } from "react-icons/md";
 import { IStation } from "../../types/IStation";
 import {
   createStation,
+  listUsers,
   loadUserStations,
   updateStation,
+  updateUser,
 } from "../../services/api";
+import { IUser } from "../../types/IUser";
 
-export function UserDashboard() {
+export function AdminDashboard() {
   const [stations, setStations] = useState<IStation[]>([
     {
       id: "sndfsjndfsjfnsdf",
       name: "sdfsdfsdfsdfsdfg",
+    },
+  ]);
+  const [users, setUsers] = useState<IUser[]>([
+    {
+      id: "sndfsjndfsjfnsdf",
+      email: "admin@admin.com",
+      role: "admin",
     },
   ]);
   const [criarEstacaoCardOpen, setCriarEstacaoCardOpen] = useState(false);
@@ -62,9 +72,23 @@ export function UserDashboard() {
     }
   }
 
+  async function loadUsers() {
+    const token = sessionStorage.getItem("@weatherData/userToken");
+
+    if (token) {
+      try {
+        const { users: usersLoaded } = await listUsers(token);
+        setUsers(usersLoaded);
+      } catch {
+        toast.error("Não foi possível carregar as estações deste usuário!");
+      }
+    }
+  }
+
   useEffect(() => {
     verifyUser();
     loadStations();
+    loadUsers();
   }, []);
 
   const columns = [
@@ -73,6 +97,13 @@ export function UserDashboard() {
     { field: "location", header: "Localização", edit: true, type: "text" },
     { field: "latitude", header: "Latitude", edit: true, type: "number" },
     { field: "longitude", header: "Longitude", edit: true, type: "number" },
+    { field: "user", header: "Proprietário", edit: false, type: "text" },
+  ];
+
+  const columnsUser = [
+    { field: "id", header: "ID", edit: false },
+    { field: "email", header: "E-mail", edit: true, type: "email" },
+    { field: "role", header: "Função", edit: true, type: "text" },
   ];
 
   const textEditor = (options: ColumnEditorOptions, type?: string) => {
@@ -88,6 +119,20 @@ export function UserDashboard() {
   };
 
   const dynamicColumns = columns.map((col) => {
+    if (col.edit)
+      return (
+        <Column
+          key={col.field}
+          field={col.field}
+          header={col.header}
+          editor={(options) => textEditor(options, col.type)}
+        />
+      );
+
+    return <Column key={col.field} field={col.field} header={col.header} />;
+  });
+
+  const dynamicColumnsUsers = columnsUser.map((col) => {
     if (col.edit)
       return (
         <Column
@@ -130,10 +175,22 @@ export function UserDashboard() {
     }
   };
 
+  const onRowEditUserComplete = async (e: DataTableRowEditCompleteParams) => {
+    try {
+      const { newData } = e;
+      const token = sessionStorage.getItem("@weatherData/userToken");
+      if (token) await updateUser(newData, token);
+      toast.success("Usuário alterado com sucesso!");
+      loadStations();
+    } catch {
+      toast.error("Houve um erro ao atualziar o usuário");
+    }
+  };
+
   return (
     <div>
       <header className="create-user-header p-mb-3">
-        <h3>Dashboard usuário</h3>
+        <h3>Dashboard administrador</h3>
         <MdLogout size={32} className="arrow" onClick={handleLogout} />
       </header>
 
@@ -208,11 +265,30 @@ export function UserDashboard() {
         <DataTable
           value={stations}
           editMode="row"
+          header="Estações"
           dataKey="id"
           onRowEditComplete={onRowEditComplete}
           responsiveLayout="scroll"
         >
           {dynamicColumns}
+          <Column
+            rowEditor
+            headerStyle={{ width: "10%", minWidth: "8rem" }}
+            bodyStyle={{ textAlign: "center" }}
+          />
+        </DataTable>
+      </div>
+
+      <div className="p-card p-fluid p-my-6">
+        <DataTable
+          value={users}
+          editMode="row"
+          header="Usuários"
+          dataKey="id"
+          onRowEditComplete={onRowEditUserComplete}
+          responsiveLayout="scroll"
+        >
+          {dynamicColumnsUsers}
           <Column
             rowEditor
             headerStyle={{ width: "10%", minWidth: "8rem" }}

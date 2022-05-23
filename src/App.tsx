@@ -1,6 +1,5 @@
 import React, { useState, createContext, useEffect, useMemo } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import { toast, ToastContainer } from "react-toastify";
 import Main from "./pages/Main";
 import Widget from "./pages/Widget";
@@ -11,6 +10,7 @@ import { IStation } from "./types/IStation";
 import api from "./config/axios";
 import { CreateUser } from "./pages/CreateUser";
 import { UserDashboard } from "./pages/UserDashboard";
+import { AdminDashboard } from "./pages/AdminDashboard";
 
 function App() {
   const [stations, setStations] = useState<IStation[]>([]);
@@ -56,6 +56,7 @@ function App() {
         <Routes>
           <Route path="/createUser" element={<CreateUser />} />
           <Route path="/userDashboard" element={<UserDashboard />} />
+          <Route path="/adminDashboard" element={<AdminDashboard />} />
           <Route
             path="/widget"
             element={
