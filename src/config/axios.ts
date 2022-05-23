@@ -12,18 +12,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-api.interceptors.response.use((config) => {
-  if (config.status === 401)
-    sessionStorage.removeItem("@weatherData/userToken");
-  // Navegar para tela inicial
+api.interceptors.response.use(
+  (config) => {
+    return config;
+  },
+  (configErr) => {
+    if (configErr.status === 401) {
+      sessionStorage.removeItem("@weatherData/userToken");
+      // Navegar para tela inicial
+    }
 
-  if (config.status >= 300 && (config.data.message || config.data.error)) {
-    return config.data.message
-      ? toast.error(config.data.message)
-      : toast.error(config.data.error);
+    return configErr;
   }
-
-  return config;
-});
+);
 
 export default api;
