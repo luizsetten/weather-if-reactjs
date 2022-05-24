@@ -2,7 +2,7 @@ import Axios from "axios";
 import { toast } from "react-toastify";
 
 const api = Axios.create({
-  baseURL: "http://192.168.0.112:3333/",
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 api.interceptors.request.use((request) => {
@@ -15,9 +15,16 @@ api.interceptors.request.use((request) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // if (error?.response?.data?.message)
+    //   toast.error(error.response.data.message);
+
+    // if (error?.response?.data?.error) toast.error(error.response.data.error);
+
     if (error.response.status === 401) {
       sessionStorage.removeItem("@weatherData/userToken");
-      window.location.href = "/";
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 5000);
     }
 
     return error;
