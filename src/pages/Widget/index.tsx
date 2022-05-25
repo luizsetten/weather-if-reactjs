@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaArrowLeft } from "react-icons/fa";
-
 import { Button } from "primereact/button";
+
 import Item from "./item";
 import { IRecord } from "../../types/IRecord";
 import Sun from "../../resources/images/sun.png";
@@ -67,8 +66,6 @@ function Widget({ props }: IWidgetProps) {
   function setData(data: IRecord) {
     if (data !== undefined) {
       setTemperature(data.temperature || 0);
-      // setMinTemperature(data.temperature || 0);
-      // setMaxTemperature(data.temperature || 0);
       setPressure(data.pressure || 0);
       setHumidity(data.humidity || 0);
       setWindSpeed(data.wind_speed || 0);
@@ -100,9 +97,14 @@ function Widget({ props }: IWidgetProps) {
   }, [selectedStation]);
 
   return (
-    <div className="container">
-      <FaArrowLeft size={32} className="arrow" onClick={handleBack} />
-      <h2 id="stationTitle">Estação Meteorológica - {nameStation}</h2>
+    <div className="container p-mb-5">
+      <Button
+        icon="pi pi-arrow-left"
+        iconPos="right"
+        className="p-button-raised p-button-rounded p-as-start p-ml-5"
+        onClick={handleBack}
+      />
+      <h2 className="p-mb-4">Estação Meteorológica - {nameStation}</h2>
       <div id="widget">
         <div id="basic">
           <div className="box">

@@ -1,10 +1,10 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
 import React, { FormEvent, useState } from "react";
-import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createUser } from "../../services/api";
-import "./styles.css";
 
 export function CreateUser() {
   const [email, setEmail] = useState("");
@@ -42,6 +42,7 @@ export function CreateUser() {
       setTimeout(() => {
         handleBack();
       }, 5000);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (erro: any) {
       if (erro.response.data.message) {
         toast.error(erro.response.data.message);
@@ -53,45 +54,46 @@ export function CreateUser() {
 
   return (
     <>
-      <header className="create-user-header ">
-        <FaArrowLeft size={32} className="arrow" onClick={handleBack} />
+      <header className="p-fluid p-d-flex p-jc-between p-mb-6">
+        <Button
+          icon="pi pi-arrow-left"
+          iconPos="right"
+          className="p-button-raised p-button-rounded p-as-start"
+          onClick={handleBack}
+        />
         <h2>Registro</h2>
         <div />
       </header>
       <form onSubmit={handleSubmit} className="create-user-container">
-        <label htmlFor="email">
-          Email
-          <input
-            className="input-login"
-            type="email"
-            name="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.currentTarget.value)}
-          />
-        </label>
-        <label htmlFor="password">
-          Senha
-          <input
-            className="input-login"
-            type="password"
-            name="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.currentTarget.value)}
-          />
-        </label>
-        <label htmlFor="repeatPassword">
-          Repita a senha
-          <input
-            className="input-login"
-            type="password"
-            name="repeatPassword"
-            id="repeatPassword"
-            value={repeatPassword}
-            onChange={(e) => setRepeatPassword(e.currentTarget.value)}
-          />
-        </label>
+        <div className="p-d-flex p-flex-column p-ai-center">
+          <span className="p-float-label p-d-flex p-mb-5">
+            <InputText
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
+            />
+            <label htmlFor="email">E-mail</label>
+          </span>
+
+          <span className="p-float-label p-d-flex p-mb-5">
+            <InputText
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
+            />
+            <label htmlFor="password">Senha</label>
+          </span>
+
+          <span className="p-float-label p-d-flex p-mb-5">
+            <InputText
+              id="repeatPassword"
+              value={repeatPassword}
+              onChange={(e) => setRepeatPassword(e.currentTarget.value)}
+            />
+            <label htmlFor="repeatPassword">Repita a senha</label>
+          </span>
+        </div>
         <Button label="Enviar" type="submit" />
       </form>
     </>

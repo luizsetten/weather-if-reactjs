@@ -1,11 +1,5 @@
 import React, { useState, createContext, useEffect, useMemo } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  unstable_HistoryRouter as HistoryRouter,
-} from "react-router-dom";
-import { createBrowserHistory } from "history";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { toast, ToastContainer } from "react-toastify";
 import Main from "./pages/Main";
@@ -20,8 +14,6 @@ import { UserDashboard } from "./pages/UserDashboard";
 import { AdminDashboard } from "./pages/AdminDashboard";
 
 function App() {
-  const history = createBrowserHistory();
-
   const [stations, setStations] = useState<IStation[]>([]);
   const [selectedStation, setSelectedStation] = useState("");
   const [nameStation, setNameStation] = useState("");

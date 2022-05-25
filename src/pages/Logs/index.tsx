@@ -1,7 +1,6 @@
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import { addDays, addMonths, differenceInDays, format } from "date-fns";
@@ -98,8 +97,13 @@ function Logs({ props }: IRecordsProps) {
   }
   return (
     <div className="container">
-      <FaArrowLeft size={32} className="arrow" onClick={handleBack} />
-      <h2 id="stationTitle">Estação Meteorológica - {nameStation}</h2>
+      <Button
+        icon="pi pi-arrow-left"
+        iconPos="right"
+        className="p-button-raised p-button-rounded p-as-start p-ml-5"
+        onClick={handleBack}
+      />
+      <h2 className="p-mb-4">Estação Meteorológica - {nameStation}</h2>
       <div id="filter">
         <div className="filterItem">
           <span>Data inicial</span>
