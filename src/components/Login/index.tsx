@@ -1,8 +1,11 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import api from "../../config/axios";
-import "./styles.css";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -37,33 +40,26 @@ export function Login() {
 
   return (
     <div>
-      <div className="container_login">
-        <label htmlFor="email">
-          Email
-          <input
-            className="input-login"
-            type="email"
-            name="email"
+      <div className="p-d-flex p-flex-column p-ai-center">
+        <span className="p-float-label p-d-flex p-mb-5">
+          <InputText
             id="email"
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.currentTarget.value)}
           />
-        </label>
+          <label htmlFor="email">E-mail</label>
+        </span>
 
-        <label htmlFor="password">
-          Password
-          <input
-            className="input-login"
-            type="password"
-            name="password"
+        <span className="p-float-label p-d-flex p-mb-5">
+          <InputText
             id="password"
             value={password}
             onChange={(e) => setPassword(e.currentTarget.value)}
           />
-        </label>
-        <button type="button" onClick={handleLogin}>
-          Login
-        </button>
+          <label htmlFor="password">Senha</label>
+        </span>
+        <Button label="Login" onClick={handleLogin} className="p-mb-5" />
       </div>
       <a href="./createUser">Cadastre-se aqui</a>
     </div>

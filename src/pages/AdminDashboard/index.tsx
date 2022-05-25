@@ -14,6 +14,7 @@ import { Panel } from "primereact/panel";
 import { InputText } from "primereact/inputtext";
 import { toast } from "react-toastify";
 import { MdLogout } from "react-icons/md";
+import { Button } from "primereact/button";
 import { IStation } from "../../types/IStation";
 import {
   createStation,
@@ -251,13 +252,11 @@ export function AdminDashboard() {
             />
           </div>
 
-          <button
-            type="button"
+          <Button
+            label="Salvar"
             className="p-my-auto"
             onClick={() => onCreateStation()}
-          >
-            Salvar
-          </button>
+          />
         </div>
       </Panel>
 

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaArrowLeft } from "react-icons/fa";
 
+import { Button } from "primereact/button";
 import Item from "./item";
 import { IRecord } from "../../types/IRecord";
 import Sun from "../../resources/images/sun.png";
@@ -147,9 +148,7 @@ function Widget({ props }: IWidgetProps) {
           id="solarIncidence"
           content={`${solarIncidence}W/m²`}
         />
-        <button type="button" id="moreInfo" onClick={handleMoreInfo}>
-          Mais Informações
-        </button>
+        <Button label="Mais Informações" onClick={handleMoreInfo} />
       </div>
     </div>
   );

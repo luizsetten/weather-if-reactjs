@@ -49,20 +49,10 @@ select {
   margin-bottom: 3em;
 }
 
-button {
-  background-color: #359830;
-  color: #FFF;
-  font-weight: bolder;
-  border-radius: 5em;
-  border: none;
-  width: 15em;
-  height: 2em;
-  cursor: pointer;
-}
 
-input {
+/* input {
   margin-bottom: 2em;
-}
+} */
 
 .lineWidget {
   background: #FFF;

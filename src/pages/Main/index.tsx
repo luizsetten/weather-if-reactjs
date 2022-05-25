@@ -1,9 +1,10 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Button } from "primereact/button";
+import { Dropdown, DropdownChangeParams } from "primereact/dropdown";
 import { Login } from "../../components/Login";
-
 import { IStation } from "../../types/IStation";
 
 import "./styles.css";
@@ -18,14 +19,16 @@ interface IMainProps {
 }
 
 function Main({ props }: IMainProps) {
+  const [optionSelected, setOptionSelected] = useState<IStation>();
   const { stations, setNameStation, selectedStation, setSelectedStation } =
     props;
 
   const navigate = useNavigate();
 
-  function handleSelect(e: ChangeEvent<HTMLSelectElement>) {
-    const select = e.target.value;
-    const { name } = stations[e.target.selectedIndex - 1];
+  function handleSelect(e: DropdownChangeParams) {
+    const select = e.target.id;
+    const { name } = e.target;
+    setOptionSelected(e.target);
     localStorage.setItem("@weatherData/selectedStation", select);
     localStorage.setItem("@weatherData/nameStation", name);
     setSelectedStation(select);
@@ -40,29 +43,27 @@ function Main({ props }: IMainProps) {
     }
   }
 
-  const stationList = stations.map((station: IStation) => (
-    <option value={station.id} key={station.id}>
-      {station.name}
-    </option>
-  ));
-
   return (
-    <div className="container_main">
-      <div className="container">
+    <div className="p-grid p-d-flex p-ai-center">
+      <div className="p-col p-d-flex p-flex-column">
         <h2 id="message">Autentique-se</h2>
         <Login />
       </div>
-      <h2 id="message">OU</h2>
+      <h2 id="message" className="p-col">
+        OU
+      </h2>
 
-      <div className="container">
+      <div className="p-col p-d-flex p-flex-column">
         <h2 id="message">Selecione uma estação abaixo</h2>
-        <select id="station_selector" onChange={(e) => handleSelect(e)}>
-          <option value="">Selecionar estação</option>
-          {stationList}
-        </select>
-        <button type="button" onClick={handleClick}>
-          Carregar
-        </button>
+        <Dropdown
+          optionLabel="name"
+          value={optionSelected}
+          options={stations}
+          onChange={(e) => handleSelect(e)}
+          placeholder="Selecionar estação"
+          className="p-mb-5"
+        />
+        <Button label="Carregar" onClick={handleClick} />
       </div>
     </div>
   );

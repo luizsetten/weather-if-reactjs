@@ -5,6 +5,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import { addDays, addMonths, differenceInDays, format } from "date-fns";
+import { Button } from "primereact/button";
 import MultiGraph from "./multiGraph";
 import Graph from "./graph";
 import { downloadLogs, loadLogs } from "../../services/api";
@@ -216,9 +217,7 @@ function Logs({ props }: IRecordsProps) {
           />
         </div>
       )}
-      <button onClick={download} type="button">
-        Download .csv
-      </button>
+      <Button label="Download .csv" onClick={download} />
     </div>
   );
 }

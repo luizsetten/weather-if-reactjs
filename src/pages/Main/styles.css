@@ -21,30 +21,6 @@ body {
 
 }
 
-
-select {
-  width: 25em;
-  height: 2em;
-  margin-bottom: 3em;
-}
-
-button {
-  background-color: #359830;
-  color: #FFF;
-  font-weight: bolder;
-  border-radius: 5em;
-  border: none;
-  width: 15em;
-  height: 2em;
-  cursor: pointer;
-}
-
-input {
-  margin-bottom: 2em;
-}
-
-
-
 .lineWidget {
   background: #FFF;
   border-radius: 5em;
@@ -56,13 +32,13 @@ input {
   align-items: center;
 }
 
-.container_main {
+/* .container_main {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100vw;
   height: 100vh;
-}
+} */
 
 .container {
   display: flex;

@@ -1,3 +1,4 @@
+import { Button } from "primereact/button";
 import React, { FormEvent, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -91,7 +92,7 @@ export function CreateUser() {
             onChange={(e) => setRepeatPassword(e.currentTarget.value)}
           />
         </label>
-        <button type="submit">Enviar</button>
+        <Button label="Enviar" type="submit" />
       </form>
     </>
   );
