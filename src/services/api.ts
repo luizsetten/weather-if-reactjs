@@ -57,8 +57,10 @@ export const createUser = async (user: IUserRegister) => {
   return data;
 };
 
-export const listUsers = async (token: string) => {
-  const { data } = await api.get<any, { data: { users: IUser[] } }>(`/users`);
+export const listUsers = async () => {
+  const { data } = await api.get<unknown, { data: { users: IUser[] } }>(
+    `/users`
+  );
   return data;
 };
 
@@ -86,8 +88,8 @@ export const updateStation = async (station: IStation, user: string) => {
   return data;
 };
 
-export const loadUserStations = async (token: string) => {
-  const { data } = await api.get<any, { data: { stations: IStation[] } }>(
+export const loadUserStations = async () => {
+  const { data } = await api.get<unknown, { data: { stations: IStation[] } }>(
     `/stations/mine`
   );
   return data;

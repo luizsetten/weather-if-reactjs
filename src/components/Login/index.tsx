@@ -2,7 +2,7 @@
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import api from "../../config/axios";
@@ -61,7 +61,8 @@ export function Login() {
         </span>
         <Button label="Login" onClick={handleLogin} className="p-mb-5" />
       </div>
-      <a href="./createUser">Cadastre-se aqui</a>
+
+      <Link to="/createUser">Cadastre-se aqui</Link>
     </div>
   );
 }

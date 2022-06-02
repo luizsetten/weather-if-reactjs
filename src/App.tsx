@@ -1,5 +1,5 @@
 import React, { useState, createContext, useEffect, useMemo } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 import { toast, ToastContainer } from "react-toastify";
 import Main from "./pages/Main";
@@ -54,7 +54,7 @@ function App() {
     <>
       <ToastContainer />
       <StationContext.Provider value={context}>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route path="/createUser" element={<CreateUser />} />
             <Route path="/userDashboard" element={<UserDashboard />} />
@@ -107,7 +107,7 @@ function App() {
               }
             />
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </StationContext.Provider>
     </>
   );

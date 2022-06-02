@@ -65,7 +65,7 @@ export function AdminDashboard() {
 
     if (token) {
       try {
-        const { stations: stationsLoaded } = await loadUserStations(token);
+        const { stations: stationsLoaded } = await loadUserStations();
         setStations(stationsLoaded);
       } catch {
         toast.error("Não foi possível carregar as estações deste usuário!");
@@ -78,7 +78,7 @@ export function AdminDashboard() {
 
     if (token) {
       try {
-        const { users: usersLoaded } = await listUsers(token);
+        const { users: usersLoaded } = await listUsers();
         setUsers(usersLoaded);
       } catch {
         toast.error("Não foi possível carregar as estações deste usuário!");

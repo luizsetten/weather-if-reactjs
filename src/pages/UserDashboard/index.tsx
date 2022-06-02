@@ -55,7 +55,7 @@ export function UserDashboard() {
 
     if (token) {
       try {
-        const { stations: stationsLoaded } = await loadUserStations(token);
+        const { stations: stationsLoaded } = await loadUserStations();
         setStations(stationsLoaded);
       } catch {
         toast.error("Não foi possível carregar as estações deste usuário!");
