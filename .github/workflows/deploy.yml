@@ -38,5 +38,5 @@ jobs:
           region: us-east-1
           bucket: lgcs-wheater-if-frontend
           source: build
-          target: .
+
     
