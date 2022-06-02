@@ -1,0 +1,42 @@
+name: ReactJs build and deploy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.2.0
+        with:
+          node-version: 16.x
+          
+      - name: Install dependencies
+        run: yarn
+        
+      - name: Build
+        run: yarn build
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          
+      - name: Deploy static files to AWS S3
+        id: aws-deploy-s3
+        uses: oneyedev/aws-deploy-s3@v2
+        with:
+          region: us-east-1
+          bucket: lgcs-wheater-if-frontend
+          source: build
+          target: .
+    
