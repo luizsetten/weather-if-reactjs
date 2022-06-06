@@ -1,4 +1,6 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/control-has-associated-label */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import React, { useState } from "react";
@@ -10,6 +12,8 @@ import api from "../../config/axios";
 export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
 
   async function handleLogin() {
@@ -51,10 +55,17 @@ export function Login() {
           <label htmlFor="email">E-mail</label>
         </span>
 
-        <span className="p-float-label p-d-flex p-mb-5">
+        <span className="p-float-label p-d-flex p-mb-5 p-input-icon-right">
+          <i
+            className={showPassword ? "pi pi-eye" : "pi pi-eye-slash"}
+            role="checkbox"
+            aria-checked="false"
+            onClick={() => setShowPassword((s) => !s)}
+          />
           <InputText
             id="password"
             value={password}
+            type={showPassword ? "text" : "password"}
             onChange={(e) => setPassword(e.currentTarget.value)}
           />
           <label htmlFor="password">Senha</label>

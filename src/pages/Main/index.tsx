@@ -45,13 +45,13 @@ function Main({ props }: IMainProps) {
 
   return (
     <div className="p-grid p-d-flex p-ai-center p-my-auto">
-      <div className="p-col p-d-flex p-flex-column">
+      <div className="p-md-4 p-col-12 p-d-flex p-flex-column">
         <h2 className="p-mb-4">Autentique-se</h2>
         <Login />
       </div>
-      <h2 className="p-col">OU</h2>
+      <h2 className="p-md-4 p-col-12">OU</h2>
 
-      <div className="p-col p-d-flex p-flex-column">
+      <div className="p-md-4 p-col-12 p-d-flex p-flex-column">
         <h2 className="p-mb-4">Selecione uma estação abaixo</h2>
         <Dropdown
           optionLabel="name"

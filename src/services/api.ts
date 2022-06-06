@@ -64,8 +64,8 @@ export const listUsers = async () => {
   return data;
 };
 
-export const updateUser = async (editUser: IUserRegister, user: string) => {
-  const { data } = await api.put("/users", { ...editUser, user });
+export const updateUser = async (editUser: IUserRegister) => {
+  const { data } = await api.put("/users", { ...editUser });
   return data;
 };
 
@@ -83,8 +83,8 @@ export const createStation = async (
   return data;
 };
 
-export const updateStation = async (station: IStation, user: string) => {
-  const { data } = await api.put("/stations", { ...station, user });
+export const updateStation = async (station: IStation) => {
+  const { data } = await api.put("/stations", station);
   return data;
 };
 

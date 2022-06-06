@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -26,19 +24,8 @@ import {
 import { IUser } from "../../types/IUser";
 
 export function AdminDashboard() {
-  const [stations, setStations] = useState<IStation[]>([
-    {
-      id: "sndfsjndfsjfnsdf",
-      name: "sdfsdfsdfsdfsdfg",
-    },
-  ]);
-  const [users, setUsers] = useState<IUser[]>([
-    {
-      id: "sndfsjndfsjfnsdf",
-      email: "admin@admin.com",
-      role: "admin",
-    },
-  ]);
+  const [stations, setStations] = useState<IStation[]>([]);
+  const [users, setUsers] = useState<IUser[]>([]);
   const [criarEstacaoCardOpen, setCriarEstacaoCardOpen] = useState(false);
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
@@ -61,15 +48,11 @@ export function AdminDashboard() {
   }
 
   async function loadStations() {
-    const token = sessionStorage.getItem("@weatherData/userToken");
-
-    if (token) {
-      try {
-        const { stations: stationsLoaded } = await loadUserStations();
-        setStations(stationsLoaded);
-      } catch {
-        toast.error("Não foi possível carregar as estações deste usuário!");
-      }
+    try {
+      const { stations: stationsLoaded } = await loadUserStations();
+      setStations(stationsLoaded);
+    } catch {
+      toast.error("Não foi possível carregar as estações deste usuário!");
     }
   }
 
@@ -164,11 +147,12 @@ export function AdminDashboard() {
     }
   };
 
-  const onRowEditComplete = async (e: DataTableRowEditCompleteParams) => {
+  const onRowEditStationComplete = async (
+    e: DataTableRowEditCompleteParams
+  ) => {
     try {
       const { newData } = e;
-      const token = sessionStorage.getItem("@weatherData/userToken");
-      if (token) await updateStation(newData, token);
+      await updateStation(newData);
       toast.success("Estação alterada com sucesso!");
       loadStations();
     } catch {
@@ -179,10 +163,9 @@ export function AdminDashboard() {
   const onRowEditUserComplete = async (e: DataTableRowEditCompleteParams) => {
     try {
       const { newData } = e;
-      const token = sessionStorage.getItem("@weatherData/userToken");
-      if (token) await updateUser(newData, token);
+      await updateUser(newData);
       toast.success("Usuário alterado com sucesso!");
-      loadStations();
+      loadUsers();
     } catch {
       toast.error("Houve um erro ao atualziar o usuário");
     }
@@ -190,7 +173,7 @@ export function AdminDashboard() {
 
   return (
     <div>
-      <header className="create-user-header p-mb-3">
+      <header className="create-user-header p-mb-3 p-d-flex p-jc-between">
         <h3>Dashboard administrador</h3>
         <MdLogout size={32} className="arrow" onClick={handleLogout} />
       </header>
@@ -202,7 +185,7 @@ export function AdminDashboard() {
         onToggle={(e) => setCriarEstacaoCardOpen(e.value)}
       >
         <h3>Nova estação</h3>
-        <div className="p-mt-5 p-d-flex p-flex-column p-md-5 p-mx-auto">
+        <div className="p-mt-5 p-d-flex p-flex-column p-sm-6 p-mx-auto">
           <div className="p-field p-d-flex p-jc-between">
             <label htmlFor="name" className="p-mr-2 p-my-auto">
               Nome
@@ -266,7 +249,7 @@ export function AdminDashboard() {
           editMode="row"
           header="Estações"
           dataKey="id"
-          onRowEditComplete={onRowEditComplete}
+          onRowEditComplete={onRowEditStationComplete}
           responsiveLayout="scroll"
         >
           {dynamicColumns}

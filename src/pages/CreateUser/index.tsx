@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import React, { FormEvent, useState } from "react";
@@ -80,6 +79,7 @@ export function CreateUser() {
             <InputText
               id="password"
               value={password}
+              type="password"
               onChange={(e) => setPassword(e.currentTarget.value)}
             />
             <label htmlFor="password">Senha</label>
@@ -88,6 +88,7 @@ export function CreateUser() {
           <span className="p-float-label p-d-flex p-mb-5">
             <InputText
               id="repeatPassword"
+              type="password"
               value={repeatPassword}
               onChange={(e) => setRepeatPassword(e.currentTarget.value)}
             />

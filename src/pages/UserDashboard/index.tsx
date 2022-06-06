@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -122,8 +120,7 @@ export function UserDashboard() {
   const onRowEditComplete = async (e: DataTableRowEditCompleteParams) => {
     try {
       const { newData } = e;
-      const token = sessionStorage.getItem("@weatherData/userToken");
-      if (token) await updateStation(newData, token);
+      await updateStation(newData);
       toast.success("Estação alterada com sucesso!");
       loadStations();
     } catch {
@@ -133,7 +130,7 @@ export function UserDashboard() {
 
   return (
     <div>
-      <header className="create-user-header p-mb-3">
+      <header className="create-user-header p-mb-3  p-d-flex p-jc-between">
         <h3>Dashboard usuário</h3>
         <MdLogout size={32} className="arrow" onClick={handleLogout} />
       </header>

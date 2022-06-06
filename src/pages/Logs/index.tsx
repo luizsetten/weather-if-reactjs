@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -80,23 +79,16 @@ function Logs({ props }: IRecordsProps) {
       endDate.toISOString()
     );
 
-    // Create blob link to download
     const url = window.URL.createObjectURL(new Blob([blob]));
     const link = document.createElement("a");
     link.href = url;
     link.setAttribute("download", `logs.csv`);
-
-    // Append to html link element page
     document.body.appendChild(link);
-
-    // Start download
     link.click();
-
-    // Clean up and remove the link
     link.parentNode?.removeChild(link);
   }
   return (
-    <div className="container">
+    <div className="container p-mb-5">
       <Button
         icon="pi pi-arrow-left"
         iconPos="right"
@@ -188,7 +180,7 @@ function Logs({ props }: IRecordsProps) {
               max: log.wind_speed_max * 2.7,
               min: log.wind_speed_min * 2.7,
             }))}
-            title="Velocidade do vento"
+            title="Rajada do vento"
             unit="m/s"
           />
           <Graph
