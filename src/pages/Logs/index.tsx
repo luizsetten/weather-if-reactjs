@@ -150,7 +150,7 @@ function Logs({ props }: IRecordsProps) {
               max: log.humidity_max,
               min: log.humidity_min,
             }))}
-            title="Humidade relativa"
+            title="Umidade relativa"
             unit="%"
           />
           <MultiGraph
