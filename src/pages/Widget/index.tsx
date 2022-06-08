@@ -118,7 +118,7 @@ function Widget({ props }: IWidgetProps) {
         <Item
           description="Pressão atmosférica"
           id="pressure"
-          content={`${pressure}hPa`}
+          content={`${pressure}Pa`}
         />
         <Item
           description="Umidade relativa"

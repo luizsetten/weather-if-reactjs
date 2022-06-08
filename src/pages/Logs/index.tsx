@@ -161,7 +161,7 @@ function Logs({ props }: IRecordsProps) {
               min: log.pressure_min,
             }))}
             title="Pressão Atmosférica"
-            unit="hPa"
+            unit="Pa"
           />
           <MultiGraph
             data={data.map((log) => ({
