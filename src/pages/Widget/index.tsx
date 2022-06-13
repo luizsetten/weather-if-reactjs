@@ -89,7 +89,11 @@ function Widget({ props }: IWidgetProps) {
   }
 
   useEffect(() => {
-    setInterval(loadLog, 60000);
+    const loadLogInterval = setInterval(loadLog, 60000);
+
+    return () => {
+      clearInterval(loadLogInterval);
+    };
   }, []);
 
   useEffect(() => {
