@@ -31,8 +31,6 @@ function Widget({ props }: IWidgetProps) {
   const history = useNavigate();
 
   const [temperature, setTemperature] = useState(0);
-  // const [minTemperature, setMinTemperature] = useState(0);
-  // const [maxTemperature, setMaxTemperature] = useState(0);
   const [pressure, setPressure] = useState(0);
   const [humidity, setHumidity] = useState(0);
   const [windSpeed, setWindSpeed] = useState(0);
@@ -43,7 +41,7 @@ function Widget({ props }: IWidgetProps) {
   const [weatherImg, setWeatherImg] = useState(Sun);
 
   function handleBack() {
-    history(-1);
+    history("/");
   }
 
   function handleMoreInfo() {

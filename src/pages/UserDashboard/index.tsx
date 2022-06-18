@@ -109,7 +109,7 @@ export function UserDashboard() {
     };
     try {
       const token = sessionStorage.getItem("@weatherData/userToken");
-      if (token) await createStation(station, token);
+      if (token) await createStation(station);
       toast.success("Estação criada com sucesso!");
       loadStations();
     } catch {

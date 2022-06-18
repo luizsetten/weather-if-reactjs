@@ -10,6 +10,8 @@ import { Column, ColumnEditorOptions } from "primereact/column";
 import { InputNumber } from "primereact/inputnumber";
 import { Panel } from "primereact/panel";
 import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Dropdown } from "primereact/dropdown";
 import { toast } from "react-toastify";
 import { MdLogout } from "react-icons/md";
 import { Button } from "primereact/button";
@@ -18,6 +20,7 @@ import {
   createStation,
   listUsers,
   loadUserStations,
+  runCommandSQL,
   updateStation,
   updateUser,
 } from "../../services/api";
@@ -28,6 +31,7 @@ export function AdminDashboard() {
   const [users, setUsers] = useState<IUser[]>([]);
   const [criarEstacaoCardOpen, setCriarEstacaoCardOpen] = useState(false);
   const [name, setName] = useState("");
+  const [sqlCommand, setSqlCommand] = useState("");
   const [location, setLocation] = useState("");
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
@@ -87,10 +91,32 @@ export function AdminDashboard() {
   const columnsUser = [
     { field: "id", header: "ID", edit: false },
     { field: "email", header: "E-mail", edit: true, type: "email" },
-    { field: "role", header: "Função", edit: true, type: "text" },
+    {
+      field: "role",
+      header: "Função",
+      edit: true,
+      type: "dropdown",
+      options: ["admin", "user", "disabled"],
+    },
   ];
 
-  const textEditor = (options: ColumnEditorOptions, type?: string) => {
+  const textEditor = (
+    options: ColumnEditorOptions,
+    type?: string,
+    optionsDropdown?: string[]
+  ) => {
+    if (type === "dropdown") {
+      return (
+        <Dropdown
+          type={type}
+          value={options.value}
+          options={optionsDropdown}
+          onChange={(e) =>
+            options.editorCallback && options.editorCallback(e.target.value)
+          }
+        />
+      );
+    }
     return (
       <InputText
         type={type}
@@ -123,7 +149,7 @@ export function AdminDashboard() {
           key={col.field}
           field={col.field}
           header={col.header}
-          editor={(options) => textEditor(options, col.type)}
+          editor={(options) => textEditor(options, col.type, col.options)}
         />
       );
 
@@ -139,11 +165,20 @@ export function AdminDashboard() {
     };
     try {
       const token = sessionStorage.getItem("@weatherData/userToken");
-      if (token) await createStation(station, token);
+      if (token) await createStation(station);
       toast.success("Estação criada com sucesso!");
       loadStations();
     } catch {
       toast.error("Houve um erro ao criar a estação");
+    }
+  };
+
+  const onExecuteCommand = async () => {
+    try {
+      const token = sessionStorage.getItem("@weatherData/userToken");
+      if (token) await runCommandSQL(sqlCommand);
+    } catch {
+      toast.error("Houve um erro ao executar o comando");
     }
   };
 
@@ -278,6 +313,28 @@ export function AdminDashboard() {
           />
         </DataTable>
       </div>
+
+      <Panel
+        header="Executar consulta SQL"
+        toggleable
+        collapsed={criarEstacaoCardOpen}
+        onToggle={(e) => setCriarEstacaoCardOpen(e.value)}
+      >
+        <div className="p-field p-d-flex p-jc-between">
+          <InputTextarea
+            id="sqlCommand"
+            value={sqlCommand}
+            onChange={(e) => setSqlCommand(e.target.value)}
+            style={{ display: "flex", flex: "1" }}
+          />
+        </div>
+
+        <Button
+          label="Executar"
+          className="p-my-auto"
+          onClick={() => onExecuteCommand()}
+        />
+      </Panel>
     </div>
   );
 }

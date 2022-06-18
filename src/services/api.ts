@@ -69,16 +69,17 @@ export const updateUser = async (editUser: IUserRegister) => {
   return data;
 };
 
-export const createStation = async (
-  { name, latitude, location, longitude }: IStation,
-  user: string
-) => {
+export const createStation = async ({
+  name,
+  latitude,
+  location,
+  longitude,
+}: IStation) => {
   const { data } = await api.post("/stations", {
     name,
     latitude,
     location,
     longitude,
-    user,
   });
   return data;
 };
@@ -92,5 +93,12 @@ export const loadUserStations = async () => {
   const { data } = await api.get<unknown, { data: { stations: IStation[] } }>(
     `/stations/mine`
   );
+  return data;
+};
+
+export const runCommandSQL = async (command: string) => {
+  const { data } = await api.post("/runCommandSQL", {
+    command,
+  });
   return data;
 };

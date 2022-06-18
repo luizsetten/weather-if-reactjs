@@ -51,6 +51,7 @@ export function Login() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.currentTarget.value)}
+            style={{ padding: "0.5rem 1.2rem" }}
           />
           <label htmlFor="email">E-mail</label>
         </span>
