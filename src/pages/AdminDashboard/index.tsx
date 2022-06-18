@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import ReactJson from "react-json-view";
 import {
   DataTable,
   DataTableRowEditCompleteParams,
 } from "primereact/datatable";
-
 import { Column, ColumnEditorOptions } from "primereact/column";
 import { InputNumber } from "primereact/inputnumber";
 import { Panel } from "primereact/panel";
@@ -35,6 +35,7 @@ export function AdminDashboard() {
   const [location, setLocation] = useState("");
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [sqlResponse, setSqlResponse] = useState({});
 
   const navigate = useNavigate();
 
@@ -176,7 +177,10 @@ export function AdminDashboard() {
   const onExecuteCommand = async () => {
     try {
       const token = sessionStorage.getItem("@weatherData/userToken");
-      if (token) await runCommandSQL(sqlCommand);
+      if (token) {
+        const resposta = await runCommandSQL(sqlCommand);
+        setSqlResponse(resposta);
+      }
     } catch {
       toast.error("Houve um erro ao executar o comando");
     }
@@ -334,6 +338,10 @@ export function AdminDashboard() {
           className="p-my-auto"
           onClick={() => onExecuteCommand()}
         />
+
+        <div className="p-my-6">
+          <ReactJson src={sqlResponse} />
+        </div>
       </Panel>
     </div>
   );
