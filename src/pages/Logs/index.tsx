@@ -47,6 +47,8 @@ function Logs({ props }: IRecordsProps) {
           endDate.toISOString()
         );
 
+        setData([]);
+
         setData(
           logs.map((log) => ({
             ...log,
@@ -130,7 +132,7 @@ function Logs({ props }: IRecordsProps) {
         Para intervalos maiores que 60 dias não é possível visualizar os
         gráficos, apenas exportar os dados.
       </small>
-      {showGraph && (
+      {showGraph && data && (
         <div id="graphGroup">
           <MultiGraph
             data={data.map((log) => ({
@@ -176,9 +178,9 @@ function Logs({ props }: IRecordsProps) {
           <MultiGraph
             data={data.map((log) => ({
               reference_date: log.reference_date,
-              avg: log.wind_speed_avg * 2.7,
-              max: log.wind_speed_max * 2.7,
-              min: log.wind_speed_min * 2.7,
+              avg: log.wind_gust_avg * 2.6314152789,
+              max: log.wind_gust_max * 2.6314152789,
+              min: log.wind_gust_min * 2.6314152789,
             }))}
             title="Rajada do vento"
             unit="m/s"

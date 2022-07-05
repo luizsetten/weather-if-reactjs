@@ -34,7 +34,7 @@ function Widget({ props }: IWidgetProps) {
   const [pressure, setPressure] = useState(0);
   const [humidity, setHumidity] = useState(0);
   const [windSpeed, setWindSpeed] = useState(0);
-  const [gustOfWind, setGustOfWind] = useState(0);
+  const [windGust, setWindGust] = useState(0);
   const [windDirection, setWindDirection] = useState(0);
   const [precipitation, setPrecipitation] = useState(0);
   const [solarIncidence, setSolarIncidence] = useState(0);
@@ -67,7 +67,7 @@ function Widget({ props }: IWidgetProps) {
       setPressure(data.pressure || 0);
       setHumidity(data.humidity || 0);
       setWindSpeed(data.wind_speed || 0);
-      setGustOfWind(data.gust_of_wind || 0);
+      setWindGust(data.wind_gust || 0);
       setWindDirection(data.wind_direction || 0);
       setPrecipitation(data.precipitation || 0);
       setSolarIncidence(data.solar_incidence || 0);
@@ -134,8 +134,8 @@ function Widget({ props }: IWidgetProps) {
         />
         <Item
           description="Rajada do vento"
-          id="gustOfWind"
-          content={`${gustOfWind}m/s`}
+          id="windGust"
+          content={`${windGust * 2.6314152789}m/s`}
         />
         <Item
           description="Direção do vento"

@@ -23,6 +23,10 @@ export interface ILog {
   wind_speed_min: number;
   wind_speed_max: number;
 
+  wind_gust_avg: number;
+  wind_gust_min: number;
+  wind_gust_max: number;
+
   wind_direction_avg: number;
 
   reference_date: string;
