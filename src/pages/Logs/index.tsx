@@ -191,6 +191,7 @@ function Logs({ props }: IRecordsProps) {
               value: log.wind_direction_avg,
             }))}
             title="Direção do vento"
+            domain={[0, 360]}
             unit="°"
             color="#99c9f9"
           />
