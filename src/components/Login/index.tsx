@@ -35,8 +35,11 @@ export function Login() {
       });
 
       sessionStorage.setItem("@weatherData/userToken", token);
+
       if (role === "admin") return navigate("/adminDashboard");
-      return navigate("/userDashboard");
+      if (role === "user") return navigate("/userDashboard");
+
+      return toast.error("Usuário não habilitado contacte o administrador!");
     } catch {
       return toast.error("Usuário e/ou senha inválido!");
     }
