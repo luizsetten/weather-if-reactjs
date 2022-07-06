@@ -120,7 +120,7 @@ function Widget({ props }: IWidgetProps) {
         <Item
           description="Pressão atmosférica"
           id="pressure"
-          content={`${pressure}Pa`}
+          content={`${pressure.toFixed(2)}Pa`}
         />
         <Item
           description="Umidade relativa"
@@ -130,12 +130,12 @@ function Widget({ props }: IWidgetProps) {
         <Item
           description="Velocidade do vento"
           id="windSpeed"
-          content={`${windSpeed}m/s`}
+          content={`${windSpeed.toFixed(2)}m/s`}
         />
         <Item
           description="Rajada do vento"
           id="windGust"
-          content={`${windGust * 2.6314152789}m/s`}
+          content={`${windGust.toFixed(2)}m/s`}
         />
         <Item
           description="Direção do vento"
