@@ -178,9 +178,9 @@ function Logs({ props }: IRecordsProps) {
           <MultiGraph
             data={data.map((log) => ({
               reference_date: log.reference_date,
-              avg: log.wind_gust_avg * 2.6314152789,
-              max: log.wind_gust_max * 2.6314152789,
-              min: log.wind_gust_min * 2.6314152789,
+              avg: log.wind_gust_avg,
+              max: log.wind_gust_max,
+              min: log.wind_gust_min,
             }))}
             title="Rajada do vento"
             unit="m/s"
