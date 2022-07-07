@@ -212,7 +212,7 @@ function Logs({ props }: IRecordsProps) {
               min: log.solar_incidence_min,
             }))}
             title="Irradiação solar"
-            unit="mW/m²"
+            unit="W/m²"
           />
         </div>
       )}
