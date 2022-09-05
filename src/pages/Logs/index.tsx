@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
-import { addDays, addMonths, differenceInDays, format } from "date-fns";
+import { addDays, addWeeks, differenceInDays, format } from "date-fns";
 import { Button } from "primereact/button";
 import MultiGraph from "./multiGraph";
 import Graph from "./graph";
@@ -32,7 +32,7 @@ function Logs({ props }: IRecordsProps) {
   const { nameStation, selectedStation } = props;
   const [data, setData] = useState<ILog[]>([]);
   const [startDate, setStartDate] = useState(
-    addDays(addMonths(new Date(), -2), 1)
+    addDays(addWeeks(new Date(), -1), 1)
   );
   const [endDate, setEndDate] = useState(new Date());
   const [showGraph, setShowGraph] = useState(true);
