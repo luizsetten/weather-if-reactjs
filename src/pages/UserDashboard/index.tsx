@@ -109,7 +109,7 @@ export function UserDashboard() {
     };
     try {
       const token = sessionStorage.getItem("@weatherData/userToken");
-      if (token) await createStation(station, token);
+      if (token) await createStation(station);
       toast.success("Estação criada com sucesso!");
       loadStations();
     } catch {
@@ -142,7 +142,7 @@ export function UserDashboard() {
         onToggle={(e) => setCriarEstacaoCardOpen(e.value)}
       >
         <h3>Nova estação</h3>
-        <div className="p-mt-5 p-d-flex p-flex-column p-md-5 p-mx-auto">
+        <div className="p-mt-5 p-d-flex p-flex-column p-col-9 p-mx-auto">
           <div className="p-field p-d-flex p-jc-between">
             <label htmlFor="name" className="p-mr-2 p-my-auto">
               Nome
@@ -204,6 +204,8 @@ export function UserDashboard() {
         <DataTable
           value={stations}
           editMode="row"
+          header="Estações"
+          emptyMessage="Sem estações"
           dataKey="id"
           onRowEditComplete={onRowEditComplete}
           responsiveLayout="scroll"

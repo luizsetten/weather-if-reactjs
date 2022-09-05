@@ -21,9 +21,18 @@ interface IGraph {
   // eslint-disable-next-line react/require-default-props
   dataKey?: string;
   unit: string | undefined;
+  // eslint-disable-next-line react/require-default-props
+  domain?: [number, number] | undefined;
 }
 
-function Graph({ title, data, color, dataKey = "value", unit }: IGraph) {
+function Graph({
+  title,
+  data,
+  color,
+  dataKey = "value",
+  unit,
+  domain,
+}: IGraph) {
   return (
     <div id="graph">
       <h2>{title}</h2>
@@ -39,7 +48,7 @@ function Graph({ title, data, color, dataKey = "value", unit }: IGraph) {
         }}
       >
         <XAxis dataKey="reference_date" />
-        <YAxis unit={unit} />
+        <YAxis unit={unit} domain={domain} allowDataOverflow />
 
         <Tooltip />
         <CartesianGrid stroke="#f5f5f5" />

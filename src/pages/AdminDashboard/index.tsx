@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import ReactJson from "react-json-view";
 import {
   DataTable,
   DataTableRowEditCompleteParams,
 } from "primereact/datatable";
-
 import { Column, ColumnEditorOptions } from "primereact/column";
 import { InputNumber } from "primereact/inputnumber";
 import { Panel } from "primereact/panel";
 import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Dropdown } from "primereact/dropdown";
 import { toast } from "react-toastify";
 import { MdLogout } from "react-icons/md";
 import { Button } from "primereact/button";
@@ -18,6 +20,7 @@ import {
   createStation,
   listUsers,
   loadUserStations,
+  runCommandSQL,
   updateStation,
   updateUser,
 } from "../../services/api";
@@ -28,9 +31,11 @@ export function AdminDashboard() {
   const [users, setUsers] = useState<IUser[]>([]);
   const [criarEstacaoCardOpen, setCriarEstacaoCardOpen] = useState(false);
   const [name, setName] = useState("");
+  const [sqlCommand, setSqlCommand] = useState("");
   const [location, setLocation] = useState("");
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [sqlResponse, setSqlResponse] = useState({});
 
   const navigate = useNavigate();
 
@@ -87,10 +92,32 @@ export function AdminDashboard() {
   const columnsUser = [
     { field: "id", header: "ID", edit: false },
     { field: "email", header: "E-mail", edit: true, type: "email" },
-    { field: "role", header: "Função", edit: true, type: "text" },
+    {
+      field: "role",
+      header: "Função",
+      edit: true,
+      type: "dropdown",
+      options: ["admin", "user", "disabled"],
+    },
   ];
 
-  const textEditor = (options: ColumnEditorOptions, type?: string) => {
+  const textEditor = (
+    options: ColumnEditorOptions,
+    type?: string,
+    optionsDropdown?: string[]
+  ) => {
+    if (type === "dropdown") {
+      return (
+        <Dropdown
+          type={type}
+          value={options.value}
+          options={optionsDropdown}
+          onChange={(e) =>
+            options.editorCallback && options.editorCallback(e.target.value)
+          }
+        />
+      );
+    }
     return (
       <InputText
         type={type}
@@ -123,7 +150,7 @@ export function AdminDashboard() {
           key={col.field}
           field={col.field}
           header={col.header}
-          editor={(options) => textEditor(options, col.type)}
+          editor={(options) => textEditor(options, col.type, col.options)}
         />
       );
 
@@ -139,11 +166,23 @@ export function AdminDashboard() {
     };
     try {
       const token = sessionStorage.getItem("@weatherData/userToken");
-      if (token) await createStation(station, token);
+      if (token) await createStation(station);
       toast.success("Estação criada com sucesso!");
       loadStations();
     } catch {
       toast.error("Houve um erro ao criar a estação");
+    }
+  };
+
+  const onExecuteCommand = async () => {
+    try {
+      const token = sessionStorage.getItem("@weatherData/userToken");
+      if (token) {
+        const resposta = await runCommandSQL(sqlCommand);
+        setSqlResponse(resposta);
+      }
+    } catch {
+      toast.error("Houve um erro ao executar o comando");
     }
   };
 
@@ -185,7 +224,7 @@ export function AdminDashboard() {
         onToggle={(e) => setCriarEstacaoCardOpen(e.value)}
       >
         <h3>Nova estação</h3>
-        <div className="p-mt-5 p-d-flex p-flex-column p-sm-6 p-mx-auto">
+        <div className="p-mt-5 p-d-flex p-flex-column p-col-9 p-mx-auto">
           <div className="p-field p-d-flex p-jc-between">
             <label htmlFor="name" className="p-mr-2 p-my-auto">
               Nome
@@ -248,6 +287,7 @@ export function AdminDashboard() {
           value={stations}
           editMode="row"
           header="Estações"
+          emptyMessage="Sem estações"
           dataKey="id"
           onRowEditComplete={onRowEditStationComplete}
           responsiveLayout="scroll"
@@ -278,6 +318,32 @@ export function AdminDashboard() {
           />
         </DataTable>
       </div>
+
+      <Panel
+        header="Executar consulta SQL"
+        toggleable
+        collapsed={criarEstacaoCardOpen}
+        onToggle={(e) => setCriarEstacaoCardOpen(e.value)}
+      >
+        <div className="p-field p-d-flex p-jc-between">
+          <InputTextarea
+            id="sqlCommand"
+            value={sqlCommand}
+            onChange={(e) => setSqlCommand(e.target.value)}
+            style={{ display: "flex", flex: "1" }}
+          />
+        </div>
+
+        <Button
+          label="Executar"
+          className="p-my-auto"
+          onClick={() => onExecuteCommand()}
+        />
+
+        <div className="p-my-6">
+          <ReactJson src={sqlResponse} />
+        </div>
+      </Panel>
     </div>
   );
 }

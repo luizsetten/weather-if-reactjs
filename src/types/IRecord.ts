@@ -3,7 +3,7 @@ export interface IRecord {
   pressure: number;
   humidity: number;
   wind_speed: number;
-  gust_of_wind: number;
+  wind_gust: number;
   wind_direction: number;
   precipitation: number;
   solar_incidence: number;

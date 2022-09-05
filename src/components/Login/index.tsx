@@ -35,8 +35,11 @@ export function Login() {
       });
 
       sessionStorage.setItem("@weatherData/userToken", token);
+
       if (role === "admin") return navigate("/adminDashboard");
-      return navigate("/userDashboard");
+      if (role === "user") return navigate("/userDashboard");
+
+      return toast.error("Usuário não habilitado contacte o administrador!");
     } catch {
       return toast.error("Usuário e/ou senha inválido!");
     }
@@ -51,6 +54,7 @@ export function Login() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.currentTarget.value)}
+            style={{ padding: "0.5rem 1.2rem" }}
           />
           <label htmlFor="email">E-mail</label>
         </span>

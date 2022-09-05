@@ -31,19 +31,17 @@ function Widget({ props }: IWidgetProps) {
   const history = useNavigate();
 
   const [temperature, setTemperature] = useState(0);
-  // const [minTemperature, setMinTemperature] = useState(0);
-  // const [maxTemperature, setMaxTemperature] = useState(0);
   const [pressure, setPressure] = useState(0);
   const [humidity, setHumidity] = useState(0);
   const [windSpeed, setWindSpeed] = useState(0);
-  const [gustOfWind, setGustOfWind] = useState(0);
+  const [windGust, setWindGust] = useState(0);
   const [windDirection, setWindDirection] = useState(0);
   const [precipitation, setPrecipitation] = useState(0);
   const [solarIncidence, setSolarIncidence] = useState(0);
   const [weatherImg, setWeatherImg] = useState(Sun);
 
   function handleBack() {
-    history(-1);
+    history("/");
   }
 
   function handleMoreInfo() {
@@ -69,7 +67,7 @@ function Widget({ props }: IWidgetProps) {
       setPressure(data.pressure || 0);
       setHumidity(data.humidity || 0);
       setWindSpeed(data.wind_speed || 0);
-      setGustOfWind(data.gust_of_wind || 0);
+      setWindGust(data.wind_gust || 0);
       setWindDirection(data.wind_direction || 0);
       setPrecipitation(data.precipitation || 0);
       setSolarIncidence(data.solar_incidence || 0);
@@ -122,7 +120,7 @@ function Widget({ props }: IWidgetProps) {
         <Item
           description="Pressão atmosférica"
           id="pressure"
-          content={`${pressure}Pa`}
+          content={`${pressure.toFixed(2)}Pa`}
         />
         <Item
           description="Umidade relativa"
@@ -132,12 +130,12 @@ function Widget({ props }: IWidgetProps) {
         <Item
           description="Velocidade do vento"
           id="windSpeed"
-          content={`${windSpeed}m/s`}
+          content={`${windSpeed.toFixed(2)}m/s`}
         />
         <Item
           description="Rajada do vento"
-          id="gustOfWind"
-          content={`${gustOfWind}m/s`}
+          id="windGust"
+          content={`${windGust.toFixed(2)}m/s`}
         />
         <Item
           description="Direção do vento"

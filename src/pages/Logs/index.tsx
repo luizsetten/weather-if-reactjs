@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
-import { addDays, addMonths, differenceInDays, format } from "date-fns";
+import { addDays, addWeeks, differenceInDays, format } from "date-fns";
 import { Button } from "primereact/button";
 import MultiGraph from "./multiGraph";
 import Graph from "./graph";
@@ -32,7 +32,7 @@ function Logs({ props }: IRecordsProps) {
   const { nameStation, selectedStation } = props;
   const [data, setData] = useState<ILog[]>([]);
   const [startDate, setStartDate] = useState(
-    addDays(addMonths(new Date(), -2), 1)
+    addDays(addWeeks(new Date(), -1), 1)
   );
   const [endDate, setEndDate] = useState(new Date());
   const [showGraph, setShowGraph] = useState(true);
@@ -46,6 +46,8 @@ function Logs({ props }: IRecordsProps) {
           startDate.toISOString(),
           endDate.toISOString()
         );
+
+        setData([]);
 
         setData(
           logs.map((log) => ({
@@ -130,7 +132,7 @@ function Logs({ props }: IRecordsProps) {
         Para intervalos maiores que 60 dias não é possível visualizar os
         gráficos, apenas exportar os dados.
       </small>
-      {showGraph && (
+      {showGraph && data && (
         <div id="graphGroup">
           <MultiGraph
             data={data.map((log) => ({
@@ -176,9 +178,9 @@ function Logs({ props }: IRecordsProps) {
           <MultiGraph
             data={data.map((log) => ({
               reference_date: log.reference_date,
-              avg: log.wind_speed_avg * 2.7,
-              max: log.wind_speed_max * 2.7,
-              min: log.wind_speed_min * 2.7,
+              avg: log.wind_gust_avg,
+              max: log.wind_gust_max,
+              min: log.wind_gust_min,
             }))}
             title="Rajada do vento"
             unit="m/s"
@@ -189,6 +191,7 @@ function Logs({ props }: IRecordsProps) {
               value: log.wind_direction_avg,
             }))}
             title="Direção do vento"
+            domain={[0, 360]}
             unit="°"
             color="#99c9f9"
           />
@@ -209,7 +212,7 @@ function Logs({ props }: IRecordsProps) {
               min: log.solar_incidence_min,
             }))}
             title="Irradiação solar"
-            unit="mW/m²"
+            unit="W/m²"
           />
         </div>
       )}

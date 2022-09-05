@@ -13,7 +13,7 @@ export function CreateUser() {
   const navigate = useNavigate();
 
   function handleBack() {
-    navigate(-1);
+    navigate("/");
   }
 
   function cleanFields() {
